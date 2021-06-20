@@ -32,6 +32,8 @@ public class Capture_Point : MonoBehaviour
         {
             if (FlagOwner==1)
             {
+
+                Ragdoll_Manager.Instance.CreateGuard(5, transform);
                 Renderer.material.SetColor("_Color", Color.blue*0.7f);
                 HP = FirstHP;
                 FlagChangePosAmount = 5 * (HP / FirstHP);

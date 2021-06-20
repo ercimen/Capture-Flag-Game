@@ -11,10 +11,25 @@ public class Enemy_Manager : MonoBehaviour
     public byte Ragdoll_StartCount;
     private byte createcount;
     Vector3 EnemyPos;
+    public bool BossTime;
+    #region Singleton
+
+    private static Enemy_Manager _ýnstance;
+
+    public static Enemy_Manager Instance
+    {
+        get
+        {
+            if (_ýnstance == null)
+                _ýnstance = FindObjectOfType<Enemy_Manager>();
+            return _ýnstance;
+        }
+    }
+    #endregion
     private void Awake()
     {
         RagdollActive = new List<int>();
-     //   GameManager.Instance.ChangeCountText(Ragdoll_StartCount);
+        //   GameManager.Instance.ChangeCountText(Ragdoll_StartCount);
     }
 
     private void Start()
@@ -22,9 +37,11 @@ public class Enemy_Manager : MonoBehaviour
         InvokeRepeating(nameof(RandomCreate), 1f, 1f);
         CheckActive();
     }
-    private void FixedUpdate()
+    private void Update()
     {
         //   CheckActive();
+        if (GameManager.Instance.EnemyCaptureCount == 1) BossTime = true;
+
        
 
     }
@@ -32,59 +49,90 @@ public class Enemy_Manager : MonoBehaviour
     void RandomCreate() => StartCoroutine(RandomCreateIE());
     IEnumerator RandomCreateIE()
     {
-        float maxX, minX;
-        
-        maxX = 5;
-        minX = -4;
+        if (!BossTime)
+        {
+         float maxX, minX;
+
+        maxX = 13;
+        minX = -12;
         float randomPos = Random.Range(minX, maxX);
         float randomTime = Random.Range(0.5f, 1.5f);
-        EnemyPos = new Vector3(randomPos, 1.6f, 28.5f);
+        EnemyPos = new Vector3(randomPos, 1.6f, 27f);
         yield return new WaitForSeconds(randomTime);
         CheckPassiveObjects(1, EnemyPos);
+        }
+       
     }
     public void CheckPassiveObjects(byte count, Vector3 position)
     {
         createcount = 0;
         int row = 1;
-       // GameManager.Instance.ChangeCountText(count);
+        // GameManager.Instance.ChangeCountText(count);
         for (int i = 0; i < Ragdoll.Length; i++)
         {
-         
+
             if (!Ragdoll[i].activeInHierarchy)
             {
                 createcount++;
                 Ragdoll[i].SetActive(true);
                 Ragdoll[i].GetComponent<Enemy_Control>().fight = false;
-                Ragdoll[i].transform.position = position+new Vector3(0,0,createcount*1.3f);
+                Ragdoll[i].transform.position = position + new Vector3(0, 0, createcount * 1.3f);
                 if (createcount == count)
-                { 
-                     CheckActive(); 
-                    return;  
+                {
+                    CheckActive();
+                    return;
                 }
-                       
+
             }
         }
 
-      
+
     }
 
-    public void CheckActive()
+    public void CreateBoX(byte count, Vector3 position)
     {
-        RagdollActive.Clear();
-           
+        createcount = 0;
+        GameManager.Instance.ChangeCountText(count);
         for (int i = 0; i < Ragdoll.Length; i++)
         {
-            if (Ragdoll[i].activeInHierarchy)
+
+            if (!Ragdoll[i].activeInHierarchy)
             {
-                RagdollActive.Add(i);   
+                createcount++;
+
+
+                Ragdoll[i].transform.position = position;
+                Ragdoll[i].transform.position += new Vector3(createcount - 3, 0, -5);
+
+                Ragdoll[i].SetActive(true);
+                if (createcount == count)
+                {
+                    CheckActive();
+                    return;
+                }
+
             }
         }
-
-    }
-
-   
-
+     }
 
     
+    public void CheckActive()
+        {
+            RagdollActive.Clear();
 
-}
+            for (int i = 0; i < Ragdoll.Length; i++)
+            {
+                if (Ragdoll[i].activeInHierarchy)
+                {
+                    RagdollActive.Add(i);
+                }
+            }
+
+        }
+
+
+
+
+
+
+    }

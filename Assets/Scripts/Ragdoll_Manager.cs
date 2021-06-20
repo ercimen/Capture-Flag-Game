@@ -12,6 +12,22 @@ public class Ragdoll_Manager : MonoBehaviour
     private byte createcount;
     private byte mod;
     Transform oldpos;
+
+    #region Singleton
+
+    private static Ragdoll_Manager _ýnstance;
+
+    public static Ragdoll_Manager Instance
+    {
+        get
+        {
+            if (_ýnstance == null)
+                _ýnstance = FindObjectOfType<Ragdoll_Manager>();
+            return _ýnstance;
+        }
+    }
+    #endregion
+
     private void Awake()
     {
         RagdollActive = new List<int>();
@@ -58,6 +74,59 @@ public class Ragdoll_Manager : MonoBehaviour
       
     }
 
+    public void CreateGuard(byte count, Transform position)
+    {
+        createcount = 0;
+        GameManager.Instance.ChangeCountText(count);
+        for (int i = 0; i < Ragdoll.Length; i++)
+        {
+
+            if (!Ragdoll[i].activeInHierarchy)
+            {
+                createcount++;
+               
+                Ragdoll[i].GetComponent<Player_Control>().fight = false;
+                Ragdoll[i].transform.position = position.position;
+                Ragdoll[i].transform.position+= new Vector3(createcount-3, 1, 2);
+                Ragdoll[i].GetComponent<Player_Control>().guard = true; 
+                Ragdoll[i].SetActive(true);
+                if (createcount == count)
+                {
+                    CheckActive();
+                    return;
+                }
+
+            }
+        }
+
+
+    }
+
+    public void CreateBoX(byte count, Vector3 position)
+    {
+        createcount = 0;
+        GameManager.Instance.ChangeCountText(count);
+        for (int i = 0; i < Ragdoll.Length; i++)
+        {
+
+            if (!Ragdoll[i].activeInHierarchy)
+            {
+                createcount++;
+
+
+                Ragdoll[i].transform.position = position;
+                Ragdoll[i].transform.position += new Vector3(createcount - 3, -1, 1);
+
+                Ragdoll[i].SetActive(true);
+                if (createcount == count)
+                {
+                    CheckActive();
+                    return;
+                }
+
+            }
+        }
+    }
     public void CheckActive()
     {
         RagdollActive.Clear();

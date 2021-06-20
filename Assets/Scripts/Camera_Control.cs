@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Camera_Control : MonoBehaviour
 {
-    [SerializeField] Transform[] CapturePoints;
+    [SerializeField] public Transform[] CapturePoints;
 
     Vector3 firstpos;
 

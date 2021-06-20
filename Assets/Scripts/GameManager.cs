@@ -19,7 +19,8 @@ public class GameManager : MonoBehaviour
     private bool click;
 
     public int PlayerCaptureCount;
-    private int EnemyCaptureCount;
+    public int EnemyCaptureCount;
+    public int EnemyHP;
 
     #region Singleton
 
@@ -38,7 +39,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
     PlayerCaptureCount=1;
-    EnemyCaptureCount=2;
+    EnemyCaptureCount=3;
 }
     private void Start()
     {

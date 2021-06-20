@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_Control : MonoBehaviour
+public class Enemy_Boss : MonoBehaviour
 {
 
     [SerializeField] float PlayerSpeed;
+    [SerializeField] int HP;
     private Animator Animator;
     public bool fight;
     GameObject target;
@@ -19,10 +20,7 @@ public class Enemy_Control : MonoBehaviour
 
     void Update()
     {
-        if (Enemy_Manager.Instance.BossTime)
-        {
-            this.gameObject.SetActive(false);
-        }
+
         EnemyMove();
 
 

@@ -8,32 +8,102 @@ public class Player_Control : MonoBehaviour
     [SerializeField] float PlayerSpeed;
     private Animator Animator;
     public bool fight;
+    public bool guard;
+    bool BossTime;
+    bool isPlayerBossCreated;
     GameObject target;
+
+    Renderer Renderer, Renderer2;
+
+
     void Awake()
     {
 
         Animator = GetComponent<Animator>();
-
+        Renderer = transform.GetChild(1).transform.GetChild(0).GetComponent<Renderer>();
+        Renderer2 = transform.GetChild(1).transform.GetChild(1).GetComponent<Renderer>();
     }
 
+    private void Start()
+    {
+
+
+    }
 
     void Update()
     {
-        PlayerMove();
+        CheckBoss();
+
+    }
+
+    void isGuard()
+    {
+        if (guard)
+        {
+          //  Renderer.material.SetColor("_Color", Color.yellow);
+          //  Renderer2.material.SetColor("_Color", Color.yellow);
+          //  transform.localScale = new Vector3(3f, 3f, 3f);
+        }
+        if (!guard)
+        {
+           // Renderer.material.SetColor("_Color", Color.blue);
+           // Renderer2.material.SetColor("_Color", Color.blue);
+            transform.localScale = new Vector3(2f, 2f, 2f);
+        }
+    }
+ 
+
+    void CheckBoss()
+    {
+        if (GameManager.Instance.EnemyCaptureCount == 1) BossTime = true;
+
+        if (!BossTime)
+        {
+            isGuard();
+            PlayerMove();
+        }
+        if (BossTime && !isPlayerBossCreated)
+        {
+           
+            CreatePlayerBoss();
+        }
+
+    }
+
+    void CreatePlayerBoss()
+    {
+        float zpos = transform.position.z;
+        float targetzpos = Camera_Control.Instance.CapturePoints[3].position.z;
+        if (zpos <= targetzpos)
+        {
+            transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
+           // transform.LookAt(Camera_Control.Instance.CapturePoints[3]);
+        }
+
+        if (zpos >= targetzpos)
+        {
+            Animator.SetFloat("Speed", 0);
+        }
     }
     void PlayerMove()
     {
-        Animator.SetFloat("Speed", 1);
 
-        if (!fight)
+
+
+        if (!fight && !guard)
         {
+            Animator.SetFloat("Speed", 1);
             transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
             transform.LookAt(transform.position + Vector3.forward);
+        }
+        if (!fight && guard)
+        {
+            Animator.SetFloat("Speed", 0);
         }
 
         if (fight)
         {
-
+            Animator.SetFloat("Speed", 1);
             if (target.activeInHierarchy)
             {
                 transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
@@ -47,9 +117,10 @@ public class Player_Control : MonoBehaviour
             }
 
         }
-        //  transform.position = Vector3.Lerp(transform.position, target.transform.position,0.02f); // Moving
 
     }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -57,7 +128,7 @@ public class Player_Control : MonoBehaviour
         {
             fight = true;
             target = other.gameObject.transform.parent.gameObject;
-          
+
         }
     }
 
@@ -67,7 +138,7 @@ public class Player_Control : MonoBehaviour
         {
             fight = true;
             target = other.gameObject.transform.parent.gameObject;
-          
+
         }
 
     }
@@ -76,7 +147,9 @@ public class Player_Control : MonoBehaviour
     {
         if (collision.collider.CompareTag("Enemy"))
         {
+            guard = false;
             this.gameObject.SetActive(false);
+
             GameManager.Instance.ChangeCountText(-1);
         }
     }

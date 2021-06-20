@@ -9,7 +9,7 @@ public class Enemy_HP : MonoBehaviour
     [SerializeField] Text txt;
     [SerializeField] GameObject Flag;
     float FlagChangePosAmount;
-    
+    [SerializeField] GameObject Confeti;
     void Start()
     {
      
@@ -19,10 +19,6 @@ public class Enemy_HP : MonoBehaviour
        
     }
 
-    private void Update()
-    {
-        
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -33,5 +29,13 @@ public class Enemy_HP : MonoBehaviour
              FlagChangePosAmount = 5 * (HP / 100);
          Flag.transform.localPosition = new Vector3(0,FlagChangePosAmount , 0);
         }
+        if (HP <= 0)
+        {
+           
+            Confeti.SetActive(true);
+
+            GameManager.Instance.NextLevel();
+        }
+
     }
 }
