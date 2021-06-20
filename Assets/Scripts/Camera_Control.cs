@@ -38,7 +38,7 @@ public class Camera_Control : MonoBehaviour
         CurrentPos = GameManager.Instance.CaptureCount();
         if (CurrentPos < 1) CurrentPos = 1;
 
-        transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, CapturePoints[CurrentPos - 1].transform.position.z), 0.02f);
+        transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, CapturePoints[CurrentPos - 1].transform.position.z-5f), 0.02f);
 
 
 

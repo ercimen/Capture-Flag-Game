@@ -19,7 +19,7 @@ public class Enemy_Manager : MonoBehaviour
 
     private void Start()
     {
-        InvokeRepeating(nameof(RandomCreate), 2f, 2f);
+        InvokeRepeating(nameof(RandomCreate), 1f, 1f);
         CheckActive();
     }
     private void FixedUpdate()
@@ -37,8 +37,8 @@ public class Enemy_Manager : MonoBehaviour
         maxX = 5;
         minX = -4;
         float randomPos = Random.Range(minX, maxX);
-        float randomTime = Random.Range(0.5f, 2f);
-        EnemyPos = new Vector3(randomPos, 1.6f, 29.5f);
+        float randomTime = Random.Range(0.5f, 1.5f);
+        EnemyPos = new Vector3(randomPos, 1.6f, 28.5f);
         yield return new WaitForSeconds(randomTime);
         CheckPassiveObjects(1, EnemyPos);
     }
