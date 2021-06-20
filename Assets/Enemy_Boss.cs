@@ -27,7 +27,7 @@ public class Enemy_Boss : MonoBehaviour
     }
     void EnemyMove()
     {
-        Animator.SetFloat("Speed", 1);
+        Animator.SetFloat("Speed", 0);
         if (!fight)
         {
             transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
@@ -39,6 +39,7 @@ public class Enemy_Boss : MonoBehaviour
 
             if (target.activeInHierarchy)
             {
+                Animator.SetFloat("Speed", 0);
                 transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
                 transform.LookAt(target.transform);
             }

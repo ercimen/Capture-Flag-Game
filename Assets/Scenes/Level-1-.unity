@@ -55495,7 +55495,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8513564576062615134, guid: e86a3b005d9a5bb40b78be6679b8383c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 114.67
+      value: 62.5
       objectReference: {fileID: 0}
     - target: {fileID: 8513564576062615134, guid: e86a3b005d9a5bb40b78be6679b8383c, type: 3}
       propertyPath: m_LocalRotation.w
@@ -60406,6 +60406,10 @@ PrefabInstance:
     - target: {fileID: 1727476321642635707, guid: dd3710fa3c937c348a949f278acff447, type: 3}
       propertyPath: m_Name
       value: EnemyBoss
+      objectReference: {fileID: 0}
+    - target: {fileID: 1727476321642635707, guid: dd3710fa3c937c348a949f278acff447, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2067972616166587137, guid: dd3710fa3c937c348a949f278acff447, type: 3}
       propertyPath: m_RootOrder

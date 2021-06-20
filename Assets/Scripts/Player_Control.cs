@@ -74,7 +74,9 @@ public class Player_Control : MonoBehaviour
     {
         float zpos = transform.position.z;
         float targetzpos = Camera_Control.Instance.CapturePoints[3].position.z;
-        if (zpos <= targetzpos)
+        if (!guard)
+        {
+ if (zpos <= targetzpos)
         {
             transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
            // transform.LookAt(Camera_Control.Instance.CapturePoints[3]);
@@ -84,6 +86,8 @@ public class Player_Control : MonoBehaviour
         {
             Animator.SetFloat("Speed", 0);
         }
+        }
+       
     }
     void PlayerMove()
     {
