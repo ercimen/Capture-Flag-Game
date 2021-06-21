@@ -11,6 +11,7 @@ public class Capture_Point : MonoBehaviour
     [SerializeField] GameObject Flag;
     float FlagChangePosAmount;
     Renderer Renderer;
+    [SerializeField] Renderer Renderer2, Renderer3;
 
     [SerializeField] public byte FlagOwner; // 1 Player 2 Enemy
     bool FlagOwnerChanged;
@@ -21,9 +22,22 @@ public class Capture_Point : MonoBehaviour
        
 
         Renderer =transform.GetChild(0).transform.GetChild(2).GetComponent<Renderer>();
-        
-        if (FlagOwner==1) Renderer.material.SetColor("_Color", Color.blue);
-        if (FlagOwner == 2) Renderer.material.SetColor("_Color", Color.red);
+        Renderer2 =Renderer2.gameObject.GetComponent<Renderer>();
+        Renderer3 =Renderer3.gameObject.GetComponent<Renderer>();
+
+        if (FlagOwner==1)
+        { 
+            Renderer.material.SetColor("_Color", Color.blue);
+            Renderer2.material.SetColor("_Color", Color.blue);
+            Renderer3.material.SetColor("_Color", Color.blue);
+        }
+        if (FlagOwner == 2)
+        {
+            Renderer.material.SetColor("_Color", Color.red);
+            Renderer2.material.SetColor("_Color", Color.red);
+            Renderer3.material.SetColor("_Color", Color.red);
+        }
+
     }
 
     private void Update()
@@ -35,19 +49,25 @@ public class Capture_Point : MonoBehaviour
 
                 Ragdoll_Manager.Instance.CreateGuard(5, transform);
                 Renderer.material.SetColor("_Color", Color.blue);
+                Renderer2.material.SetColor("_Color", Color.blue);
+                Renderer3.material.SetColor("_Color", Color.blue);
                 HP = FirstHP;
               //  FlagChangePosAmount = 5 * (HP / FirstHP);
               //  Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0);
                 GameManager.Instance.ChangeCountCapture(1,"Player");
+                transform.GetChild(1).gameObject.GetComponent<Cannon_Manager>().CannonOwner = 1;
 
             }
             if (FlagOwner == 2)
             {
                 Renderer.material.SetColor("_Color", Color.red);
+                Renderer2.material.SetColor("_Color", Color.red);
+                Renderer3.material.SetColor("_Color", Color.red);
                 HP = FirstHP;
                // FlagChangePosAmount = 5 * (HP / FirstHP);
                // Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0);
                 GameManager.Instance.ChangeCountCapture(1, "Enemy");
+                transform.GetChild(1).gameObject.GetComponent<Cannon_Manager>().CannonOwner = 2;
             }
             FlagOwnerChanged = false;
         }

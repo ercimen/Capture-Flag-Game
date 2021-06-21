@@ -407,6 +407,8 @@ MonoBehaviour:
   HP: 5
   txt: {fileID: 0}
   Flag: {fileID: 0}
+  Renderer2: {fileID: 1325181235832320641}
+  Renderer3: {fileID: 5936919529331115700}
   FlagOwner: 0
 --- !u!136 &4921236859204332066
 CapsuleCollider:
@@ -729,7 +731,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  firetoEnemy: 0
+  fired: 0
 --- !u!54 &5565160190501660100
 Rigidbody:
   m_ObjectHideFlags: 0

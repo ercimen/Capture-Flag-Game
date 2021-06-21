@@ -11,28 +11,40 @@ public class Cannon_Manager : MonoBehaviour
     bool fight;
     public bool fired;
     float timer;
+    public int CannonOwner;
+
 
     private void Awake()
     {
         ActiveBall = 0;
+        CannonOwner = transform.parent.gameObject.GetComponent<Capture_Point>().FlagOwner;
+
     }
     void Start()
     {
-      fired = false;
-      timer = 1f;
-     
+        fired = false;
+        timer = 1f;
+
     }
 
-  
+
 
     private void Update()
     {
-        Attack();
 
-        if (fired==true)
+        Attack();
+        AttackDelay();
+
+
+    }
+
+
+    void AttackDelay()
+    {
+        if (fired == true)
         {
             timer -= Time.deltaTime;
-           
+
             if (timer <= 0)
             {
                 ActiveBall++;
@@ -60,13 +72,11 @@ public class Cannon_Manager : MonoBehaviour
                 timer = 1f;
             }
         }
-       
     }
-
 
     void Attack()
     {
-       
+
         if (fight)
         {
             targetPos = new Vector3(target.transform.position.x, target.transform.position.y + 3, target.transform.position.z);
@@ -74,55 +84,74 @@ public class Cannon_Manager : MonoBehaviour
 
             if (target.activeInHierarchy)
             {
-              Fire();
-              fired = true;
+                Fire();
+                fired = true;
             }
 
-            
-        } 
-      
-      
-     
+        }
+
+        if (!fight)
+        {
+
+           if (CannonOwner==1) transform.LookAt(new Vector3(0, transform.position.y, 0));
+            if (CannonOwner == 2) transform.LookAt(new Vector3(0, transform.position.y, -200));
+        }
+
+
+
     }
 
     void Fire()
     {
-            Balls[ActiveBall].transform.position = Vector3.Lerp(Balls[ActiveBall].transform.position, targetPos, 20f * Time.deltaTime);
+        Balls[ActiveBall].transform.position = Vector3.Lerp(Balls[ActiveBall].transform.position, targetPos, 20f * Time.deltaTime);
 
     }
-   
+
     private void OnTriggerStay(Collider other)
     {
 
-        if (other.CompareTag("Player"))
-        {
-            fight = true;
-            Debug.Log("Tower Range ");
-            if (!target)
-            {
-                  target = other.gameObject;
-            }
-
-            // StartCoroutine(AttackDelay(0.5f));
-        }
-    }
-
-    public void FireBall(Vector3 position)
-    {
-
-        for (int i = 0; i < Balls.Length; i++)
+        if (other.CompareTag("Player") && CannonOwner !=1)
         {
 
-            if (!Balls[i].activeInHierarchy)
-            {
-                Balls[i].transform.position = position;
-                Balls[i].transform.position += new Vector3(0, 2.2f, 0);
-                Balls[i].SetActive(true);
-                ActiveBall = i;
-                return;
-            }
+                fight = true;
+                Debug.Log("Tower Range ");
+                if (!target)
+                {
+                    target = other.gameObject;
+                }
         }
+        if (other.CompareTag("Player") && CannonOwner == 1)
+        {
+
+            fight = false;
+            target = null;
+           
+            Debug.Log("Dostum geldi");
+           
+        }
+
+
+        if (other.CompareTag("Enemy") && CannonOwner != 2)
+        {
+
+                fight = true;
+                Debug.Log("Tower Range ");
+                if (!target)
+                {
+                    target = other.gameObject;
+                }
+
+        }
+        if (other.CompareTag("Enemy") && CannonOwner == 2)
+        {
+
+            fight = false;
+            target = null;
+            
+            Debug.Log("Dostum geldi");
+
+        }
+
     }
 
-   
 }
