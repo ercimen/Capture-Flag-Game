@@ -39,7 +39,7 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 559520677247567225}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -50,7 +50,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 94dd8689a78fccf4384fa40f06ad7ec0, type: 2}
+  - {fileID: 2100000, guid: eb6c37490fc012c4f8fb756e4de852d6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -470,7 +470,7 @@ SkinnedMeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4466633411942341534}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -481,7 +481,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 94dd8689a78fccf4384fa40f06ad7ec0, type: 2}
+  - {fileID: 2100000, guid: eb6c37490fc012c4f8fb756e4de852d6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -676,8 +676,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1f60105716699c489f5b411b5c7222c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerSpeed: 200
+  PlayerSpeed: 3
   fight: 0
+  guard: 0
 --- !u!54 &8946034450045009876
 Rigidbody:
   m_ObjectHideFlags: 0
