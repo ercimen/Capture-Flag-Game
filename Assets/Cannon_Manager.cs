@@ -9,8 +9,8 @@ public class Cannon_Manager : MonoBehaviour
     Vector3 targetPos;
     int ActiveBall;
     bool fight;
-    public bool firetoEnemy;
-    bool fired;
+    public bool fired;
+    float timer;
 
     private void Awake()
     {
@@ -18,13 +18,49 @@ public class Cannon_Manager : MonoBehaviour
     }
     void Start()
     {
- firetoEnemy = false;
+      fired = false;
+      timer = 1f;
+     
     }
 
-    // Update is called once per frame
-    void FixedUpdate()
+  
+
+    private void Update()
     {
         Attack();
+
+        if (fired==true)
+        {
+            timer -= Time.deltaTime;
+           
+            if (timer <= 0)
+            {
+                ActiveBall++;
+                Debug.Log("ActiveBall" + ActiveBall);
+                if (ActiveBall == 2)
+                {
+                    ActiveBall = 0;
+                    Balls[0].gameObject.SetActive(true);
+                    Balls[1].gameObject.SetActive(false);
+                    Balls[0].transform.position = transform.position;
+                    Balls[0].transform.position += new Vector3(0, 2.2f, 0);
+                    fired = false;
+
+                }
+                if (ActiveBall == 1)
+                {
+                    Balls[1].gameObject.SetActive(true);
+                    Balls[0].gameObject.SetActive(false);
+                    Balls[1].transform.position = transform.position;
+                    Balls[1].transform.position += new Vector3(0, 2.2f, 0);
+                    fired = false;
+                }
+
+
+                timer = 1f;
+            }
+        }
+       
     }
 
 
@@ -35,30 +71,39 @@ public class Cannon_Manager : MonoBehaviour
         {
             targetPos = new Vector3(target.transform.position.x, target.transform.position.y + 3, target.transform.position.z);
             transform.LookAt(targetPos);
-        } 
-        if (firetoEnemy == true)
+
+            if (target.activeInHierarchy)
             {
-            FireBall(transform.position);
-            Fire();
+              Fire();
+              fired = true;
             }
 
+            
+        } 
+      
+      
+     
     }
-    IEnumerator AttackDelay(float waitTime)
+
+    void Fire()
     {
-        firetoEnemy = false;
-        yield return new WaitForSeconds(waitTime);
-        firetoEnemy = true;
+            Balls[ActiveBall].transform.position = Vector3.Lerp(Balls[ActiveBall].transform.position, targetPos, 20f * Time.deltaTime);
+
     }
-    private void OnTriggerEnter(Collider other)
+   
+    private void OnTriggerStay(Collider other)
     {
+
         if (other.CompareTag("Player"))
         {
             fight = true;
-            firetoEnemy = true;
             Debug.Log("Tower Range ");
-            target = other.gameObject;
+            if (!target)
+            {
+                  target = other.gameObject;
+            }
+
             // StartCoroutine(AttackDelay(0.5f));
-            Attack();
         }
     }
 
@@ -79,19 +124,5 @@ public class Cannon_Manager : MonoBehaviour
         }
     }
 
-    void Fire()
-    {
-        if (ActiveBall >= 1)
-        {
-            ActiveBall = 0;
-        }
-        Balls[ActiveBall].transform.position = Vector3.Lerp(Balls[ActiveBall].transform.position, targetPos, 0.2f);
-        
-        Debug.Log("ActiveBall" + ActiveBall);
-        if (!Balls[ActiveBall].activeInHierarchy)
-        {
-            ActiveBall++;
-            FireBall(transform.position);
-        }
-    }
+   
 }
