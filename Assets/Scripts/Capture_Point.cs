@@ -12,18 +12,18 @@ public class Capture_Point : MonoBehaviour
     float FlagChangePosAmount;
     Renderer Renderer;
 
-    [SerializeField] byte FlagOwner; // 1 Player 2 Enemy
+    [SerializeField] public byte FlagOwner; // 1 Player 2 Enemy
     bool FlagOwnerChanged;
     void Start()
     {
       
         FirstHP = HP;
-        txt.GetComponent<UnityEngine.UI.Text>().text = HP.ToString();
+       
 
-        Renderer =transform.GetChild(0).transform.GetChild(0).transform.GetChild(0).GetComponent<Renderer>();
+        Renderer =transform.GetChild(0).transform.GetChild(2).GetComponent<Renderer>();
         
-        if (FlagOwner==1) Renderer.material.SetColor("_Color", Color.blue*0.7f);
-        if (FlagOwner == 2) Renderer.material.SetColor("_Color", Color.red*0.7f);
+        if (FlagOwner==1) Renderer.material.SetColor("_Color", Color.blue);
+        if (FlagOwner == 2) Renderer.material.SetColor("_Color", Color.red);
     }
 
     private void Update()
@@ -34,19 +34,19 @@ public class Capture_Point : MonoBehaviour
             {
 
                 Ragdoll_Manager.Instance.CreateGuard(5, transform);
-                Renderer.material.SetColor("_Color", Color.blue*0.7f);
+                Renderer.material.SetColor("_Color", Color.blue);
                 HP = FirstHP;
-                FlagChangePosAmount = 5 * (HP / FirstHP);
-                Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0);
+              //  FlagChangePosAmount = 5 * (HP / FirstHP);
+              //  Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0);
                 GameManager.Instance.ChangeCountCapture(1,"Player");
 
             }
             if (FlagOwner == 2)
             {
-                Renderer.material.SetColor("_Color", Color.red*0.7f);
+                Renderer.material.SetColor("_Color", Color.red);
                 HP = FirstHP;
-                FlagChangePosAmount = 5 * (HP / FirstHP);
-                Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0);
+               // FlagChangePosAmount = 5 * (HP / FirstHP);
+               // Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0);
                 GameManager.Instance.ChangeCountCapture(1, "Enemy");
             }
             FlagOwnerChanged = false;
@@ -76,8 +76,8 @@ public class Capture_Point : MonoBehaviour
             }
 
             // txt.GetComponent<UnityEngine.UI.Text>().text = HP.ToString();
-            FlagChangePosAmount = 5 * (HP / FirstHP );
-            Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0); 
+           // FlagChangePosAmount = 5 * (HP / FirstHP );
+           // Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0); 
         }
 
         if (other.CompareTag("Enemy"))
@@ -101,8 +101,8 @@ public class Capture_Point : MonoBehaviour
             }
 
             // txt.GetComponent<UnityEngine.UI.Text>().text = HP.ToString();
-            FlagChangePosAmount = 5 * (HP / FirstHP);
-            Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0);
+          //  FlagChangePosAmount = 5 * (HP / FirstHP);
+          //  Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0);
         }
 
     }

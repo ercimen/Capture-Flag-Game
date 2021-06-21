@@ -9,6 +9,7 @@ public class Player_Control : MonoBehaviour
     private Animator Animator;
     public bool fight;
     public bool guard;
+    public bool Capturetower;
     bool BossTime;
     bool isPlayerBossCreated;
     GameObject target;
@@ -40,18 +41,18 @@ public class Player_Control : MonoBehaviour
     {
         if (guard)
         {
-          //  Renderer.material.SetColor("_Color", Color.yellow);
-          //  Renderer2.material.SetColor("_Color", Color.yellow);
-          //  transform.localScale = new Vector3(3f, 3f, 3f);
+            //  Renderer.material.SetColor("_Color", Color.yellow);
+            //  Renderer2.material.SetColor("_Color", Color.yellow);
+            //  transform.localScale = new Vector3(3f, 3f, 3f);
         }
         if (!guard)
         {
-           // Renderer.material.SetColor("_Color", Color.blue);
-           // Renderer2.material.SetColor("_Color", Color.blue);
+            // Renderer.material.SetColor("_Color", Color.blue);
+            // Renderer2.material.SetColor("_Color", Color.blue);
             transform.localScale = new Vector3(2f, 2f, 2f);
         }
     }
- 
+
 
     void CheckBoss()
     {
@@ -64,7 +65,7 @@ public class Player_Control : MonoBehaviour
         }
         if (BossTime && !isPlayerBossCreated)
         {
-           
+
             CreatePlayerBoss();
         }
 
@@ -76,18 +77,18 @@ public class Player_Control : MonoBehaviour
         float targetzpos = Camera_Control.Instance.CapturePoints[3].position.z;
         if (!guard)
         {
- if (zpos <= targetzpos)
-        {
-            transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
-           // transform.LookAt(Camera_Control.Instance.CapturePoints[3]);
+            if (zpos <= targetzpos)
+            {
+                transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
+                                                                                        // transform.LookAt(Camera_Control.Instance.CapturePoints[3]);
+            }
+
+            if (zpos >= targetzpos)
+            {
+                Animator.SetFloat("Speed", 0);
+            }
         }
 
-        if (zpos >= targetzpos)
-        {
-            Animator.SetFloat("Speed", 0);
-        }
-        }
-       
     }
     void PlayerMove()
     {
@@ -122,6 +123,13 @@ public class Player_Control : MonoBehaviour
 
         }
 
+        if (Capturetower)
+        {
+            Animator.SetFloat("Speed", 1);
+            transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
+            transform.LookAt(target.transform);
+        }
+
     }
 
 
@@ -134,6 +142,37 @@ public class Player_Control : MonoBehaviour
             target = other.gameObject.transform.parent.gameObject;
 
         }
+
+        if (other.CompareTag("Tower") && Capturetower)
+        {
+            guard = false;
+            Capturetower = false;
+            this.gameObject.SetActive(false);
+            Debug.Log("Towere girdim");
+
+        }
+
+        if (other.CompareTag("TowerRange"))
+        {
+            if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner == 2)
+            {
+                Capturetower = true;
+                Debug.Log("Tower Range ");
+                target = other.gameObject.transform.GetChild(2).gameObject;
+            }
+
+        }
+
+        if (other.CompareTag("Ball") )
+        {
+            guard = false;
+            Capturetower = false;
+            this.gameObject.SetActive(false);
+            Debug.Log("Öldüm ya La");
+            other.gameObject.SetActive(false);
+
+        }
+
     }
 
     private void OnTriggerStay(Collider other)
@@ -152,6 +191,7 @@ public class Player_Control : MonoBehaviour
         if (collision.collider.CompareTag("Enemy"))
         {
             guard = false;
+            Capturetower = false;
             this.gameObject.SetActive(false);
 
             GameManager.Instance.ChangeCountText(-1);
