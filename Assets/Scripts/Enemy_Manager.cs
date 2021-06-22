@@ -115,8 +115,31 @@ public class Enemy_Manager : MonoBehaviour
         }
      }
 
-    
-    public void CheckActive()
+    public void CreateTowerWarrior(byte count, Vector3 position)
+    {
+        createcount = 0;
+        GameManager.Instance.ChangeCountText(count);
+        for (int i = 0; i < Ragdoll.Length; i++)
+        {
+            if (!Ragdoll[i].activeInHierarchy)
+            {
+                createcount++;
+                // Ragdoll[i].GetComponent<Player_Control>().fight = false;
+                Ragdoll[i].transform.position = position;
+                // Ragdoll[i].transform.position += new Vector3(column - 3, 1, 2 * raw);
+                // Ragdoll[i].GetComponent<Player_Control>().guard = true; 
+                Ragdoll[i].SetActive(true);
+                Ragdoll[i].gameObject.GetComponent<Enemy_Control>().HP = 3;
+                if (createcount == count)
+                {
+                    CheckActive();
+                    return;
+                }
+
+            }
+        }
+    }
+        public void CheckActive()
         {
             RagdollActive.Clear();
 

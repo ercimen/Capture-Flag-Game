@@ -11,19 +11,23 @@ public class Cannon_Manager : MonoBehaviour
     bool fight;
     public bool fired;
     float timer;
+    float attackDelay;
     public int CannonOwner;
+
+    [SerializeField] GameObject FireEffect;
 
 
     private void Awake()
     {
         ActiveBall = 0;
+        attackDelay = 1.5f;
         CannonOwner = transform.parent.gameObject.GetComponent<Capture_Point>().FlagOwner;
 
     }
     void Start()
     {
         fired = false;
-        timer = 1f;
+        timer = attackDelay;
 
     }
 
@@ -69,32 +73,33 @@ public class Cannon_Manager : MonoBehaviour
                 }
 
 
-                timer = 1f;
+                timer = attackDelay;
             }
         }
     }
 
     void Attack()
     {
-
+       
         if (fight)
         {
-            targetPos = new Vector3(target.transform.position.x, target.transform.position.y + 3, target.transform.position.z);
+            targetPos = new Vector3(target.transform.position.x, target.transform.position.y + 1, target.transform.position.z);
             transform.LookAt(targetPos);
 
             if (target.activeInHierarchy)
             {
                 Fire();
                 fired = true;
+               
             }
 
         }
 
         if (!fight)
         {
-
-           if (CannonOwner==1) transform.LookAt(new Vector3(0, transform.position.y, 0));
-            if (CannonOwner == 2) transform.LookAt(new Vector3(0, transform.position.y, -200));
+            target = null;
+          //  if (CannonOwner==1) transform.LookAt(new Vector3(0, transform.position.y, 0));
+          //  if (CannonOwner == 2) transform.LookAt(new Vector3(0, transform.position.y, -200));
         }
 
 
@@ -103,55 +108,58 @@ public class Cannon_Manager : MonoBehaviour
 
     void Fire()
     {
+       
         Balls[ActiveBall].transform.position = Vector3.Lerp(Balls[ActiveBall].transform.position, targetPos, 20f * Time.deltaTime);
-
+        // Balls[ActiveBall].GetComponent<Rigidbody>().velocity = targetPos*20;
+        
     }
+
 
     private void OnTriggerStay(Collider other)
     {
-
-        if (other.CompareTag("Player") && CannonOwner !=1)
-        {
-
-                fight = true;
-                Debug.Log("Tower Range ");
-                if (!target)
-                {
-                    target = other.gameObject;
-                }
-        }
+        /*
         if (other.CompareTag("Player") && CannonOwner == 1)
         {
-
             fight = false;
             target = null;
-           
             Debug.Log("Dostum geldi");
-           
-        }
-
-
-        if (other.CompareTag("Enemy") && CannonOwner != 2)
-        {
-
-                fight = true;
-                Debug.Log("Tower Range ");
-                if (!target)
-                {
-                    target = other.gameObject;
-                }
-
         }
         if (other.CompareTag("Enemy") && CannonOwner == 2)
         {
 
             fight = false;
             target = null;
-            
             Debug.Log("Dostum geldi");
+        }
+        */
+
+        if (other.CompareTag("Player") && CannonOwner !=1)
+        {
+
+                fight = true;
+                Debug.Log("Tower Range ");
+          
+            target = other.gameObject;
+            if (!target)
+                {
+                    target = other.gameObject;
+                }
+        }
+       
+        if (other.CompareTag("Enemy") && CannonOwner != 2)
+        {
+
+                fight = true;
+                Debug.Log("Tower Range ");
+            target = other.gameObject;
+            if (!target)
+                {
+                    target = other.gameObject;
+                }
 
         }
-
+        
+       
     }
 
 }

@@ -18,6 +18,7 @@ TagManager:
   - Tower
   - TowerRange
   - Ball
+  - Ball2
   layers:
   - Default
   - TransparentFX

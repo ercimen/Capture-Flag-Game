@@ -6,13 +6,16 @@ public class Enemy_Control : MonoBehaviour
 {
 
     [SerializeField] float PlayerSpeed;
+    public float HP;
     private Animator Animator;
     public bool fight;
     GameObject target;
+    public bool Capturetower;
     void Awake()
     {
 
         Animator = GetComponent<Animator>();
+        HP = 1; 
 
     }
 
@@ -24,7 +27,14 @@ public class Enemy_Control : MonoBehaviour
             this.gameObject.SetActive(false);
         }
         EnemyMove();
-
+        
+        if (HP>1)
+        {
+            // transform.localScale = new Vector3(transform.localScale.x + (HP / 30), transform.localScale.y + (HP / 30), transform.localScale.z + (HP / 30));
+            transform.localScale = new Vector3(HP, HP,HP);
+            Debug.Log("HP" + HP);
+        }
+ 
 
     }
     void EnemyMove()
@@ -53,26 +63,64 @@ public class Enemy_Control : MonoBehaviour
 
         }
 
+        if (Capturetower)
+        {
+            Animator.SetFloat("Speed", 1);
+            transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
+            transform.LookAt(target.transform);
+        }
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("PlayerTrig"))
         {
             fight = true;
             target = other.gameObject.transform.parent.gameObject;
-            Debug.Log("triglendim");
         }
+        if (other.CompareTag("Tower") && Capturetower)
+        {
+           
+            Capturetower = false;
+            this.gameObject.SetActive(false);
+            Debug.Log("Towere girdim");
+
+        }
+
+        if (other.CompareTag("TowerRange"))
+        {
+            if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner == 1)
+            {
+                Capturetower = true;
+                Debug.Log("Tower Range ");
+                target = other.gameObject.transform.GetChild(2).gameObject;
+            }
+
+        }
+
+        if (other.CompareTag("Ball"))
+        {
+           
+            Capturetower = false;
+            this.gameObject.SetActive(false);
+            Debug.Log("Öldüm ya La");
+            other.gameObject.SetActive(false);
+
+        }
+
+
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("PlayerTrig"))
         {
             fight = true;
             target = other.gameObject.transform.parent.gameObject;
-            Debug.Log("triglendim durdum");
         }
+
+
 
     }
 
@@ -80,7 +128,13 @@ public class Enemy_Control : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
-            this.gameObject.SetActive(false);
+            HP--;
+            if (HP <= 0)
+            {
+                Capturetower = false;
+                this.gameObject.SetActive(false);
+                HP = 1;
+            }
         }
     }
 

@@ -677,8 +677,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerSpeed: 3
+  HP: 0
   fight: 0
   guard: 0
+  Capturetower: 0
 --- !u!54 &8946034450045009876
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -835,7 +837,7 @@ GameObject:
   - component: {fileID: 7227471654343016722}
   m_Layer: 6
   m_Name: TargetSearch
-  m_TagString: Player
+  m_TagString: PlayerTrig
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

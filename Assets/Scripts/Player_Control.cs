@@ -6,6 +6,7 @@ public class Player_Control : MonoBehaviour
 {
 
     [SerializeField] float PlayerSpeed;
+    public float HP;
     private Animator Animator;
     public bool fight;
     public bool guard;
@@ -23,6 +24,7 @@ public class Player_Control : MonoBehaviour
         Animator = GetComponent<Animator>();
         Renderer = transform.GetChild(1).transform.GetChild(0).GetComponent<Renderer>();
         Renderer2 = transform.GetChild(1).transform.GetChild(1).GetComponent<Renderer>();
+        HP = 1;
     }
 
     private void Start()
@@ -34,7 +36,12 @@ public class Player_Control : MonoBehaviour
     void Update()
     {
         CheckBoss();
+        if (HP>1)
+        {
+               transform.localScale = new Vector3(transform.localScale.x+(HP/3), transform.localScale.y + (HP / 3), transform.localScale.z+ (HP / 3));
 
+        }
+   
     }
 
     void isGuard()
@@ -80,7 +87,7 @@ public class Player_Control : MonoBehaviour
             if (zpos <= targetzpos)
             {
                 transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
-                                                                                        // transform.LookAt(Camera_Control.Instance.CapturePoints[3]);
+                // transform.LookAt(Camera_Control.Instance.CapturePoints[3]);
             }
 
             if (zpos >= targetzpos)
@@ -136,7 +143,7 @@ public class Player_Control : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("EnemyTrig"))
         {
             fight = true;
             target = other.gameObject.transform.parent.gameObject;
@@ -167,9 +174,11 @@ public class Player_Control : MonoBehaviour
         {
             guard = false;
             Capturetower = false;
+          //  this.gameObject.GetComponent<Rigidbody>().AddExplosionForce(10f, transform.position, 5f, 3.0F);
             this.gameObject.SetActive(false);
             Debug.Log("Öldüm ya La");
             other.gameObject.SetActive(false);
+            
 
         }
 
@@ -177,7 +186,7 @@ public class Player_Control : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("EnemyTrig"))
         {
             fight = true;
             target = other.gameObject.transform.parent.gameObject;
@@ -190,14 +199,32 @@ public class Player_Control : MonoBehaviour
     {
         if (collision.collider.CompareTag("Enemy"))
         {
-            guard = false;
-            Capturetower = false;
-            this.gameObject.SetActive(false);
+            HP--;
+            if (HP<=0)
+            {
+                 guard = false;
+                 Capturetower = false;
+                 this.gameObject.SetActive(false);
+                 HP = 1;
+            }
+
 
             GameManager.Instance.ChangeCountText(-1);
         }
+
+        if (collision.collider.CompareTag("Ball2"))
+        {
+             this.gameObject.GetComponent<Rigidbody>().AddExplosionForce(300f, transform.position, 5f, 3.0F);
+           // StartCoroutine(PassiveDelay(1f));
+        }
     }
 
+    IEnumerator PassiveDelay(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        this.gameObject.SetActive(false);
+
+    }
 }
 
 

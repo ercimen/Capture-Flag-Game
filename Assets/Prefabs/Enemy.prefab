@@ -578,7 +578,7 @@ GameObject:
   - component: {fileID: 8862277809552033454}
   m_Layer: 0
   m_Name: Target
-  m_TagString: Enemy
+  m_TagString: EnemyTrig
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -787,7 +787,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerSpeed: 3
+  HP: 0
   fight: 0
+  Capturetower: 0
 --- !u!1 &5980142025513344403
 GameObject:
   m_ObjectHideFlags: 0
