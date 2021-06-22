@@ -18,6 +18,13 @@ public class LevelManager : MonoBehaviour
     {
         Number = 0;
     }
-   
-   
+    private void Update()
+    {
+        if (GameManager.Instance.EnemyCaptureCount==0)
+        {
+            GameManager.Instance.NextLevel();
+        }
+        
+    }
+
 }

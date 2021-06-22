@@ -16,9 +16,10 @@ public class Capture_Point : MonoBehaviour
     [SerializeField] public byte FlagOwner; // 1 Player 2 Enemy
     bool FlagOwnerChanged;
     bool BossTime;
+    Vector3 oldpos;
     void Start()
     {
-      
+        oldpos = transform.position;
         FirstHP = HP;
         Renderer =transform.GetChild(0).transform.GetChild(2).GetComponent<Renderer>();
 
@@ -40,14 +41,15 @@ public class Capture_Point : MonoBehaviour
             if (FlagOwner==1)  Ragdoll_Manager.Instance.CreateTowerWarrior(1, transform.position);
             if (FlagOwner ==2) Enemy_Manager.Instance.CreateTowerWarrior(1, transform.position);
 
-
         }
 
     }
 
     private void Update()
     {
-        if (GameManager.Instance.EnemyCaptureCount == 1) BossTime = true;
+       
+
+        if (GameManager.Instance.EnemyCaptureCount == 0) BossTime = true;
 
         if (FlagOwnerChanged)
         {
@@ -60,8 +62,7 @@ public class Capture_Point : MonoBehaviour
                 Renderer.material.SetColor("_Color", Color.blue);
              
                 HP = FirstHP;
-              //  FlagChangePosAmount = 5 * (HP / FirstHP);
-              //  Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0);
+               
                 GameManager.Instance.ChangeCountCapture(1,"Player");
               
 
@@ -71,8 +72,8 @@ public class Capture_Point : MonoBehaviour
                 Renderer.material.SetColor("_Color", Color.red);
                
                 HP = FirstHP;
-               // FlagChangePosAmount = 5 * (HP / FirstHP);
-               // Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0);
+                
+               
                 GameManager.Instance.ChangeCountCapture(1, "Enemy");
               
             }
@@ -103,8 +104,7 @@ public class Capture_Point : MonoBehaviour
             }
 
             // txt.GetComponent<UnityEngine.UI.Text>().text = HP.ToString();
-           // FlagChangePosAmount = 5 * (HP / FirstHP );
-           // Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0); 
+           
         }
 
         if (other.CompareTag("Enemy"))
@@ -128,8 +128,7 @@ public class Capture_Point : MonoBehaviour
             }
 
             // txt.GetComponent<UnityEngine.UI.Text>().text = HP.ToString();
-          //  FlagChangePosAmount = 5 * (HP / FirstHP);
-          //  Flag.transform.localPosition = new Vector3(0, FlagChangePosAmount, 0);
+          
         }
 
     }
