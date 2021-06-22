@@ -40,7 +40,7 @@ public class Enemy_Manager : MonoBehaviour
     private void Update()
     {
         //   CheckActive();
-        if (GameManager.Instance.EnemyCaptureCount == 1) BossTime = true;
+        if (GameManager.Instance.EnemyCaptureCount == 0) BossTime = true;
 
        
 

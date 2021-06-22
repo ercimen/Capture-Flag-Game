@@ -54,7 +54,7 @@ public class Capture_Point : MonoBehaviour
             if (FlagOwner==1)
             {
                 StartCoroutine(Confeti(1f));
-                 Ragdoll_Manager.Instance.CreateGuard(10, transform);
+             //    Ragdoll_Manager.Instance.CreateGuard(10, transform);
                // Ragdoll_Manager.Instance.CheckPassiveObjects(10, this.transform);
 
                 Renderer.material.SetColor("_Color", Color.blue);

@@ -63,7 +63,7 @@ public class Player_Control : MonoBehaviour
 
     void CheckBoss()
     {
-        if (GameManager.Instance.EnemyCaptureCount == 1) BossTime = true;
+        if (GameManager.Instance.EnemyCaptureCount == 0) BossTime = true;
 
         if (!BossTime)
         {
@@ -161,12 +161,7 @@ public class Player_Control : MonoBehaviour
 
         if (other.CompareTag("TowerRange"))
         {
-            if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner == 2)
-            {
-                Capturetower = true;
-                Debug.Log("Tower Range ");
-                target = other.gameObject.transform.GetChild(2).gameObject;
-            }
+          
 
         }
 
@@ -190,6 +185,26 @@ public class Player_Control : MonoBehaviour
         {
             fight = true;
             target = other.gameObject.transform.parent.gameObject;
+
+        }
+
+        if (other.CompareTag("TowerRange"))
+        {
+            if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner == 1)
+            {
+                Capturetower = false;
+                Debug.Log("Tower Range ");
+               // target = null;
+               // target = other.gameObject.transform.GetChild(2).gameObject;
+            }
+
+            if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner == 2)
+            {
+                Capturetower = true;
+                Debug.Log("Tower Range ");
+                target = other.gameObject.transform.GetChild(2).gameObject;
+            }
+
 
         }
 

@@ -19,6 +19,8 @@ TagManager:
   - TowerRange
   - Ball
   - Ball2
+  - PlayerTrig
+  - EnemyTrig
   layers:
   - Default
   - TransparentFX

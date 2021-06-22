@@ -62,6 +62,7 @@ public class Ragdoll_Manager : MonoBehaviour
                 Ragdoll[i].GetComponent<Player_Control>().fight = false;
                 Ragdoll[i].transform.position = position.position;
                 Ragdoll[i].GetComponent<Rigidbody>().AddForce(new Vector3(0, 1f, 0f) * 2, ForceMode.Impulse);
+                Ragdoll[i].gameObject.GetComponent<Player_Control>().HP = 1;
                 if (createcount == count)
                 { 
                      CheckActive(); 
