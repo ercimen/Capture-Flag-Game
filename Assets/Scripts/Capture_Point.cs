@@ -88,11 +88,13 @@ public class Capture_Point : MonoBehaviour
             if (FlagOwner!=1)
             {
              HP--;
+                StartCoroutine(Dust(1f));
                 if (HP <= 0)
                  {
                 FlagOwner = 1;
                 FlagOwnerChanged = true;
                 }
+                
             }
             if (FlagOwner == 1)
             {
@@ -112,6 +114,7 @@ public class Capture_Point : MonoBehaviour
             if (FlagOwner != 2)
             {
                 HP--;
+                StartCoroutine(Dust(1f));
                 if (HP <= 0)
                 {
                     FlagOwner = 2;
@@ -139,6 +142,16 @@ public class Capture_Point : MonoBehaviour
         transform.GetChild(1).gameObject.GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(waitTime);
         transform.GetChild(1).gameObject.SetActive(false);
+
+    }
+    IEnumerator Dust(float waitTime)
+    {
+        transform.position -= new Vector3(0, 0.1f, 0);
+        transform.GetChild(2).gameObject.SetActive(true);
+        transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().Play();
+        yield return new WaitForSeconds(waitTime);
+        transform.GetChild(2).gameObject.SetActive(false);
+        transform.position += new Vector3(0, 0.1f, 0);
 
     }
 }

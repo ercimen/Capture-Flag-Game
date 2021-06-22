@@ -5,6 +5,7 @@ using UnityEngine;
 public class Camera_Control : MonoBehaviour
 {
     [SerializeField] public Transform[] CapturePoints;
+    public Transform EndGame;
 
     Vector3 firstpos;
 
@@ -39,12 +40,14 @@ public class Camera_Control : MonoBehaviour
         if (CurrentPos < 1) CurrentPos = 1;
 
         transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, CapturePoints[CurrentPos - 1].transform.position.z-5f), 0.02f);
-
-
-
-
+        
     }
 
+    public void EndGameFc()
+    {
+        transform.position = Vector3.Lerp(transform.position, EndGame.transform.position, 0.01f);
+        transform.rotation = Quaternion.Lerp(transform.rotation, EndGame.rotation, Time.time*0.2f );
+    }
     public void ChangeCamPos(int count)
     {
         if (count == 1)

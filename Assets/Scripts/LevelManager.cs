@@ -22,6 +22,7 @@ public class LevelManager : MonoBehaviour
     {
         if (GameManager.Instance.EnemyCaptureCount==0)
         {
+            Camera_Control.Instance.EndGameFc();
             GameManager.Instance.NextLevel();
         }
         

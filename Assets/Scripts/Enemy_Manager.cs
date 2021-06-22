@@ -57,7 +57,7 @@ public class Enemy_Manager : MonoBehaviour
         minX = -12;
         float randomPos = Random.Range(minX, maxX);
         float randomTime = Random.Range(0.5f, 1.5f);
-        EnemyPos = new Vector3(randomPos, 1.6f, 27f);
+        EnemyPos = new Vector3(randomPos, 1.6f, 80f);
         yield return new WaitForSeconds(randomTime);
         CheckPassiveObjects(1, EnemyPos);
         }

@@ -99,15 +99,7 @@ public class Enemy_Control : MonoBehaviour
 
         }
 
-        if (other.CompareTag("Ball"))
-        {
-           
-            Capturetower = false;
-            this.gameObject.SetActive(false);
-            Debug.Log("Öldüm ya La");
-            other.gameObject.SetActive(false);
-
-        }
+     
 
 
     }
@@ -126,16 +118,52 @@ public class Enemy_Control : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.collider.tag == "Jump")
+        {
+            gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 4f, -2f) * 2, ForceMode.Impulse); // Jump  
+        }
+
+        if (collision.collider.tag == "KillPlayer")
+        {
+
+          
+            Capturetower = false;
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(Death(0.3f));
+
+            }
+
+            HP = 1;
+
+            GameManager.Instance.ChangeCountText(-1);
+        }
+
+
         if (collision.collider.CompareTag("Player"))
         {
             HP--;
             if (HP <= 0)
             {
                 Capturetower = false;
-                this.gameObject.SetActive(false);
+                if (gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(Death(0.3f));
+
+                }
                 HP = 1;
             }
         }
+    }
+    IEnumerator Death(float waitTime)
+    {
+        transform.GetChild(1).gameObject.SetActive(false);
+        transform.GetChild(2).gameObject.SetActive(true);
+        transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().Play();
+        yield return new WaitForSeconds(waitTime);
+        transform.GetChild(1).gameObject.SetActive(true);
+        transform.GetChild(2).gameObject.SetActive(false);
+        this.gameObject.SetActive(false);
     }
 
 }

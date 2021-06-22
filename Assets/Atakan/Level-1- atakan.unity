@@ -4786,7 +4786,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5852940301550386888, guid: d7cfbfd203f9ea24b93374c23f806014, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5852940301550386889, guid: d7cfbfd203f9ea24b93374c23f806014, type: 3}
       propertyPath: PlayerSpeed
@@ -18162,11 +18162,6 @@ GameObject:
 Transform:
   m_CorrespondingSourceObject: {fileID: 6517274485027644530, guid: d7cfbfd203f9ea24b93374c23f806014, type: 3}
   m_PrefabInstance: {fileID: 1195856292}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &738364031 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1943430143136975079, guid: 4894505bb7a9b6541b93032ea8ff94e1, type: 3}
-  m_PrefabInstance: {fileID: 2000791428}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &738647548
 PrefabInstance:
@@ -33365,11 +33360,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6517274485027644530, guid: d7cfbfd203f9ea24b93374c23f806014, type: 3}
   m_PrefabInstance: {fileID: 415907399}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1384226033 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6296704055707845679, guid: 4894505bb7a9b6541b93032ea8ff94e1, type: 3}
-  m_PrefabInstance: {fileID: 2000791428}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1384742192 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5852940301550386888, guid: 4cc440d2379130d4a92337f688434878, type: 3}
@@ -42876,8 +42866,8 @@ MonoBehaviour:
   ButtonText: {fileID: 2228435746627128298}
   liveCount: 0
   Score: 0
-  PlayerCaptureCount: 0
-  EnemyCaptureCount: 0
+  PlayerCaptureCount: 1
+  EnemyCaptureCount: 3
   EnemyHP: 0
 --- !u!4 &1798920462
 Transform:
@@ -45149,6 +45139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerSpeed: 6
+  HP: 0
   fight: 0
   Capturetower: 0
 --- !u!1 &1899336258 stripped
@@ -46983,11 +46974,11 @@ PrefabInstance:
     - target: {fileID: 7226808928547269312, guid: 4894505bb7a9b6541b93032ea8ff94e1, type: 3}
       propertyPath: Balls.Array.data[0]
       value: 
-      objectReference: {fileID: 1384226033}
+      objectReference: {fileID: 0}
     - target: {fileID: 7226808928547269312, guid: 4894505bb7a9b6541b93032ea8ff94e1, type: 3}
       propertyPath: Balls.Array.data[1]
       value: 
-      objectReference: {fileID: 738364031}
+      objectReference: {fileID: 0}
     - target: {fileID: 7226808928547269312, guid: 4894505bb7a9b6541b93032ea8ff94e1, type: 3}
       propertyPath: Balls.Array.data[2]
       value: 

@@ -38,8 +38,7 @@ public class GameManager : MonoBehaviour
     #endregion
     private void Awake()
     {
-    PlayerCaptureCount=1;
-    EnemyCaptureCount=3;
+
 }
     private void Start()
     {

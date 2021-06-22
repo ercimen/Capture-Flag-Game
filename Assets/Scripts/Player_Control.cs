@@ -38,27 +38,12 @@ public class Player_Control : MonoBehaviour
         CheckBoss();
         if (HP>1)
         {
-               transform.localScale = new Vector3(transform.localScale.x+(HP/3), transform.localScale.y + (HP / 3), transform.localScale.z+ (HP / 3));
-
+            transform.localScale = new Vector3(HP, HP, HP);
         }
    
     }
 
-    void isGuard()
-    {
-        if (guard)
-        {
-            //  Renderer.material.SetColor("_Color", Color.yellow);
-            //  Renderer2.material.SetColor("_Color", Color.yellow);
-            //  transform.localScale = new Vector3(3f, 3f, 3f);
-        }
-        if (!guard)
-        {
-            // Renderer.material.SetColor("_Color", Color.blue);
-            // Renderer2.material.SetColor("_Color", Color.blue);
-            transform.localScale = new Vector3(2f, 2f, 2f);
-        }
-    }
+   
 
 
     void CheckBoss()
@@ -67,36 +52,16 @@ public class Player_Control : MonoBehaviour
 
         if (!BossTime)
         {
-            isGuard();
             PlayerMove();
         }
-        if (BossTime && !isPlayerBossCreated)
+        if (BossTime)
         {
 
-            CreatePlayerBoss();
         }
 
     }
 
-    void CreatePlayerBoss()
-    {
-        float zpos = transform.position.z;
-        float targetzpos = Camera_Control.Instance.CapturePoints[3].position.z;
-        if (!guard)
-        {
-            if (zpos <= targetzpos)
-            {
-                transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
-                // transform.LookAt(Camera_Control.Instance.CapturePoints[3]);
-            }
-
-            if (zpos >= targetzpos)
-            {
-                Animator.SetFloat("Speed", 0);
-            }
-        }
-
-    }
+    
     void PlayerMove()
     {
 
@@ -165,17 +130,7 @@ public class Player_Control : MonoBehaviour
 
         }
 
-        if (other.CompareTag("Ball") )
-        {
-            guard = false;
-            Capturetower = false;
-          //  this.gameObject.GetComponent<Rigidbody>().AddExplosionForce(10f, transform.position, 5f, 3.0F);
-            this.gameObject.SetActive(false);
-            Debug.Log("Öldüm ya La");
-            other.gameObject.SetActive(false);
-            
-
-        }
+       
 
     }
 
@@ -212,6 +167,27 @@ public class Player_Control : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.collider.tag == "Jump")
+        {
+            gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 4f, 2f) * 2, ForceMode.Impulse); // Jump  
+        }
+
+        if (collision.collider.tag == "KillPlayer")
+        {
+
+            guard = false;
+            Capturetower = false;
+            if (gameObject.activeInHierarchy)
+            {
+                StartCoroutine(Death(0.3f));
+
+            }
+
+            HP = 1;
+
+            GameManager.Instance.ChangeCountText(-1);
+        }
+
         if (collision.collider.CompareTag("Enemy"))
         {
             HP--;
@@ -219,7 +195,12 @@ public class Player_Control : MonoBehaviour
             {
                  guard = false;
                  Capturetower = false;
-                 this.gameObject.SetActive(false);
+                if (gameObject.activeInHierarchy)
+                {  
+                    StartCoroutine(Death(0.3f));
+
+                }
+              
                  HP = 1;
             }
 
@@ -232,6 +213,16 @@ public class Player_Control : MonoBehaviour
              this.gameObject.GetComponent<Rigidbody>().AddExplosionForce(300f, transform.position, 5f, 3.0F);
            // StartCoroutine(PassiveDelay(1f));
         }
+    }
+    IEnumerator Death(float waitTime)
+    {
+        transform.GetChild(1).gameObject.SetActive(false); 
+        transform.GetChild(2).gameObject.SetActive(true);
+        transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().Play();
+        yield return new WaitForSeconds(waitTime);
+        transform.GetChild(1).gameObject.SetActive(true);
+        transform.GetChild(2).gameObject.SetActive(false);
+        this.gameObject.SetActive(false);
     }
 
     IEnumerator PassiveDelay(float waitTime)
