@@ -14,6 +14,8 @@ public class Player_Control : MonoBehaviour
     bool BossTime;
     bool isPlayerBossCreated;
     GameObject target;
+    [SerializeField] GameObject EndLevelTarget;
+
 
     Renderer Renderer, Renderer2;
 
@@ -56,7 +58,11 @@ public class Player_Control : MonoBehaviour
         }
         if (BossTime)
         {
-
+            guard = false;
+            Capturetower = false;
+            Animator.SetFloat("Speed", 1);
+            transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
+            transform.LookAt(EndLevelTarget.transform.position);
         }
 
     }
