@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject inGamePanel;
     public GameObject GameOverPanel;
     public GameObject NextLevelPanel;
+    [SerializeField] GameObject EnemyCastle,PlayerCastle;
     [Header("Other")]
     public Text Lives, Diamond, ButtonText;
 
@@ -59,12 +60,15 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
+        Camera_Control.Instance.LoseGame();
+        PlayerCastle.GetComponent<Animator>().enabled = true;
         inGamePanel.SetActive(false);
         GameOverPanel.SetActive(true);
-        StartCoroutine(ResourceTickOver(3f, 0));
+        StartCoroutine(ResourceTickOver(10f, 0));
     }
     public void NextLevel()
     {
+        EnemyCastle.GetComponent<Animator>().enabled =true;
         ButtonText.text = "GET " + liveCount;
         inGamePanel.SetActive(false);
         NextLevelPanel.SetActive(true);
