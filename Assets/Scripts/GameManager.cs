@@ -113,16 +113,16 @@ public class GameManager : MonoBehaviour
             PlayerCaptureCount += count;
             EnemyCaptureCount -= count;
             Camera_Control.Instance.ChangeCamPos(1);
-            TowerImage1.sprite = Sprites[PlayerCaptureCount];
+            
         }
 
         if (whois == "Enemy")
         {
             EnemyCaptureCount += count;
             PlayerCaptureCount -= count;
-            TowerImage1.sprite = Sprites[PlayerCaptureCount];
+           
         }
-
+        TowerImage1.sprite = Sprites[PlayerCaptureCount];
         Debug.Log("PlayerCapture:"+PlayerCaptureCount);
         Debug.Log("EnemyCapture:" + EnemyCaptureCount);
 
