@@ -15,6 +15,10 @@ public class GameManager : MonoBehaviour
     [Header("Other")]
     public Text Lives, Diamond, ButtonText;
 
+    [Header("TowerImages")]
+    [SerializeField] Image TowerImage1;
+    [SerializeField] Sprite[] Sprites;
+
     public int liveCount;
     public int Score = 0;
     private bool click;
@@ -52,7 +56,7 @@ public class GameManager : MonoBehaviour
     }
     void Update()
     {
-        Lives.text = liveCount.ToString();
+      //  Lives.text = liveCount.ToString();
         if (PlayerCaptureCount == 0) // GameOver Controlünü yapacağım
         {
             GameOver();
@@ -109,12 +113,14 @@ public class GameManager : MonoBehaviour
             PlayerCaptureCount += count;
             EnemyCaptureCount -= count;
             Camera_Control.Instance.ChangeCamPos(1);
+            TowerImage1.sprite = Sprites[PlayerCaptureCount];
         }
 
         if (whois == "Enemy")
         {
             EnemyCaptureCount += count;
             PlayerCaptureCount -= count;
+            TowerImage1.sprite = Sprites[PlayerCaptureCount];
         }
 
         Debug.Log("PlayerCapture:"+PlayerCaptureCount);
