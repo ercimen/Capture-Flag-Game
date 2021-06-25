@@ -14,15 +14,15 @@ public class Enemy_Manager : MonoBehaviour
     public bool BossTime;
     #region Singleton
 
-    private static Enemy_Manager _ýnstance;
+    private static Enemy_Manager _Instance;
 
     public static Enemy_Manager Instance
     {
         get
         {
-            if (_ýnstance == null)
-                _ýnstance = FindObjectOfType<Enemy_Manager>();
-            return _ýnstance;
+            if (_Instance == null)
+                _Instance = FindObjectOfType<Enemy_Manager>();
+            return _Instance;
         }
     }
     #endregion
@@ -34,7 +34,7 @@ public class Enemy_Manager : MonoBehaviour
 
     private void Start()
     {
-        InvokeRepeating(nameof(RandomCreate), 1f, 1f);
+        InvokeRepeating(nameof(RandomCreate), .5f, .5f);
         CheckActive();
     }
     private void Update()

@@ -7,7 +7,7 @@ public class Camera_Control : MonoBehaviour
     [SerializeField] public Transform[] CapturePoints;
     public Transform EndGame,EndGame2;
     bool endgame1;
-
+    public float offset;
     Vector3 firstpos;
 
     int CurrentPos;
@@ -40,7 +40,7 @@ public class Camera_Control : MonoBehaviour
         CurrentPos = GameManager.Instance.CaptureCount();
         if (CurrentPos < 1) CurrentPos = 1;
 
-        transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, CapturePoints[CurrentPos - 1].transform.position.z-5f), 0.02f);
+        transform.position = Vector3.Lerp(transform.position, new Vector3(transform.position.x, transform.position.y, CapturePoints[CurrentPos - 1].transform.position.z+offset), 0.02f);
         
     }
 
@@ -56,7 +56,7 @@ public class Camera_Control : MonoBehaviour
     public void LoseGame()
     {
         transform.LookAt(new Vector3(0, 0, 0));
-        transform.position = Vector3.Lerp(transform.position, EndGame2.transform.position, 0.01f);
+        transform.position = Vector3.Lerp(transform.position, EndGame2.transform.position, 0.1f);
         transform.rotation = Quaternion.Lerp(transform.rotation, EndGame2.rotation, Time.time * 0.1f);
 
     }

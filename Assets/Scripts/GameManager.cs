@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
         PlayerCastle.GetComponent<Animator>().enabled = true;
         inGamePanel.SetActive(false);
         GameOverPanel.SetActive(true);
-        StartCoroutine(ResourceTickOver(10f, 0));
+        StartCoroutine(ResourceTickOver(5f, 0));
     }
     public void NextLevel()
     {
