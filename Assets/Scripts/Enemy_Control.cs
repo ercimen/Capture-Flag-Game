@@ -6,11 +6,13 @@ public class Enemy_Control : MonoBehaviour
 {
 
     [SerializeField] float PlayerSpeed;
+    [SerializeField] GameObject EndLevelTarget;
     public float HP;
     private Animator Animator;
     public bool fight;
     GameObject target;
     public bool Capturetower;
+    bool BossTime;
     void Awake()
     {
 
@@ -22,17 +24,19 @@ public class Enemy_Control : MonoBehaviour
 
     void Update()
     {
-        if (Enemy_Manager.Instance.BossTime)
+        if (GameManager.Instance.PlayerCaptureCount == 0) 
         {
-            this.gameObject.SetActive(false);
+            Capturetower = false;
+            target = null;
+            fight = false;
+            transform.LookAt(EndLevelTarget.transform.position);
         }
         EnemyMove();
         
         if (HP>1)
         {
-            // transform.localScale = new Vector3(transform.localScale.x + (HP / 30), transform.localScale.y + (HP / 30), transform.localScale.z + (HP / 30));
             transform.localScale = new Vector3(HP, HP,HP);
-            Debug.Log("HP" + HP);
+          
         }
  
 
@@ -42,17 +46,26 @@ public class Enemy_Control : MonoBehaviour
         Animator.SetFloat("Speed", 1);
         if (!fight)
         {
-            transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
             transform.LookAt(transform.position + Vector3.back);
+            transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
+            
+            if (Capturetower)
+            {
+                fight = false;  
+                Animator.SetFloat("Speed", 1);
+                transform.LookAt(target.transform);
+                transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
+            }
         }
 
         if (fight)
         {
-
+            
             if (target.activeInHierarchy)
             {
-                transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
                 transform.LookAt(target.transform);
+                transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
+                
             }
 
             if (!target.activeInHierarchy)
@@ -63,12 +76,7 @@ public class Enemy_Control : MonoBehaviour
 
         }
 
-        if (Capturetower)
-        {
-            Animator.SetFloat("Speed", 1);
-            transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
-            transform.LookAt(target.transform);
-        }
+       
 
     }
 
@@ -88,20 +96,6 @@ public class Enemy_Control : MonoBehaviour
 
         }
 
-        if (other.CompareTag("TowerRange"))
-        {
-            if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner == 1)
-            {
-                Capturetower = true;
-                Debug.Log("Tower Range ");
-                target = other.gameObject.transform.GetChild(2).gameObject;
-            }
-
-        }
-
-     
-
-
     }
 
     private void OnTriggerStay(Collider other)
@@ -110,6 +104,22 @@ public class Enemy_Control : MonoBehaviour
         {
             fight = true;
             target = other.gameObject.transform.parent.gameObject;
+        }
+
+        if (other.CompareTag("TowerRange"))
+        {
+            if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner == 1)
+            {
+                Capturetower = true;
+                Debug.Log("Tower Range "+Capturetower);
+                target = other.gameObject.transform.GetChild(2).gameObject;
+            }
+            if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner != 1)
+            {
+                Capturetower = false;
+            }
+
+
         }
 
 
@@ -126,17 +136,14 @@ public class Enemy_Control : MonoBehaviour
         if (collision.collider.tag == "KillPlayer")
         {
 
-          
             Capturetower = false;
+            fight = false; 
+           
             if (gameObject.activeInHierarchy)
             {
                 StartCoroutine(Death(0.3f));
-
             }
-
             HP = 1;
-
-            GameManager.Instance.ChangeCountText(-1);
         }
 
 
@@ -146,6 +153,7 @@ public class Enemy_Control : MonoBehaviour
             if (HP <= 0)
             {
                 Capturetower = false;
+                fight = false;
                 if (gameObject.activeInHierarchy)
                 {
                     StartCoroutine(Death(0.3f));

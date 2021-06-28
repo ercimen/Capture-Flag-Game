@@ -50,6 +50,12 @@ public class Capture_Point : MonoBehaviour
        
 
         if (GameManager.Instance.EnemyCaptureCount == 0) BossTime = true;
+        if (GameManager.Instance.PlayerCaptureCount == 0) BossTime = true;
+
+        if (BossTime)
+        {
+            HP = 1000;
+        }
 
         if (FlagOwnerChanged)
         {

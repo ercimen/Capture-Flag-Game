@@ -65,7 +65,9 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         Camera_Control.Instance.LoseGame();
+        PlayerCastle.transform.position = new Vector3(0, 4.73f, 22);
         PlayerCastle.GetComponent<Animator>().enabled = true;
+
         inGamePanel.SetActive(false);
         GameOverPanel.SetActive(true);
         StartCoroutine(ResourceTickOver(5f, 0));

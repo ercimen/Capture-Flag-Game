@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_Control : MonoBehaviour
+public class Player_Archer : MonoBehaviour
 {
 
     [SerializeField] float PlayerSpeed;
@@ -37,15 +37,16 @@ public class Player_Control : MonoBehaviour
 
     void Update()
     {
-        CheckBoss();
-        if (HP>1)
+      //  CheckBoss();
+        if (HP > 1)
         {
             transform.localScale = new Vector3(HP, HP, HP);
+           
         }
-   
+ PlayerMove();
     }
 
-   
+
 
 
     void CheckBoss()
@@ -67,39 +68,34 @@ public class Player_Control : MonoBehaviour
 
     }
 
-    
+
     void PlayerMove()
     {
 
 
 
-        if (!fight)
+        if (!fight && !guard)
         {
             Animator.SetFloat("Speed", 1);
             transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
             transform.LookAt(transform.position + Vector3.forward);
 
-            if (Capturetower)
-            {
-                if (target.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner==1)
-                {
-
-                }
-
-                Animator.SetFloat("Speed", 1);
-                transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
-                transform.LookAt(target.transform);
-            }
         }
-       
+        if (!fight && guard)
+        {
+            Animator.SetFloat("Speed", 0);
+        }
 
         if (fight)
         {
-            Animator.SetFloat("Speed", 1);
+            Debug.Log(target.gameObject.name);
+          //  Animator.SetFloat("Speed", 0);
+          
+           
             if (target.activeInHierarchy)
             {
-                transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
-                transform.LookAt(target.transform);
+                transform.LookAt(target.gameObject.transform.position);
+                 Animator.SetTrigger("Shoot");
             }
 
             if (!target.activeInHierarchy)
@@ -108,6 +104,7 @@ public class Player_Control : MonoBehaviour
                 return;
             }
 
+            
         }
 
        
@@ -136,11 +133,11 @@ public class Player_Control : MonoBehaviour
 
         if (other.CompareTag("TowerRange"))
         {
-          
+
 
         }
 
-       
+
 
     }
 
@@ -158,12 +155,15 @@ public class Player_Control : MonoBehaviour
             if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner == 1)
             {
                 Capturetower = false;
+                Debug.Log("Tower Range ");
+                // target = null;
+                // target = other.gameObject.transform.GetChild(2).gameObject;
             }
 
             if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner == 2)
             {
                 Capturetower = true;
-                
+                Debug.Log("Tower Range ");
                 target = other.gameObject.transform.GetChild(2).gameObject;
             }
 
@@ -198,17 +198,17 @@ public class Player_Control : MonoBehaviour
         if (collision.collider.CompareTag("Enemy"))
         {
             HP--;
-            if (HP<=0)
+            if (HP <= 0)
             {
-                 guard = false;
-                 Capturetower = false;
+                guard = false;
+                Capturetower = false;
                 if (gameObject.activeInHierarchy)
-                {  
+                {
                     StartCoroutine(Death(0.3f));
 
                 }
-              
-                 HP = 1;
+
+                HP = 1;
             }
 
 
@@ -217,13 +217,13 @@ public class Player_Control : MonoBehaviour
 
         if (collision.collider.CompareTag("Ball2"))
         {
-             this.gameObject.GetComponent<Rigidbody>().AddExplosionForce(300f, transform.position, 5f, 3.0F);
-           // StartCoroutine(PassiveDelay(1f));
+            this.gameObject.GetComponent<Rigidbody>().AddExplosionForce(300f, transform.position, 5f, 3.0F);
+            // StartCoroutine(PassiveDelay(1f));
         }
     }
     IEnumerator Death(float waitTime)
     {
-        transform.GetChild(1).gameObject.SetActive(false); 
+        transform.GetChild(1).gameObject.SetActive(false);
         transform.GetChild(2).gameObject.SetActive(true);
         transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(waitTime);
