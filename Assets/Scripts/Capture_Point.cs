@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class Capture_Point : MonoBehaviour
 {
     [SerializeField] float HP;
+    [SerializeField] int TowerNumber;
     float FirstHP;
     [SerializeField] Text txt;
     [SerializeField] GameObject Flag;
@@ -16,11 +17,13 @@ public class Capture_Point : MonoBehaviour
     [SerializeField] public byte FlagOwner; // 1 Player 2 Enemy
     bool FlagOwnerChanged;
     bool BossTime;
+    bool HPCoverForBug;
     Vector3 oldpos;
     void Start()
     {
         oldpos = transform.position;
         FirstHP = HP;
+        HPCoverForBug = false;
         Renderer =transform.GetChild(0).transform.GetChild(2).GetComponent<Renderer>();
 
         if (FlagOwner==1) Renderer.material.SetColor("_Color", Color.blue);
@@ -47,7 +50,18 @@ public class Capture_Point : MonoBehaviour
 
     private void Update()
     {
-       
+        if (GameManager.Instance.PlayerCaptureCount>TowerNumber)
+        {
+            HP = 11111;
+            HPCoverForBug = true;
+        }
+        if (GameManager.Instance.PlayerCaptureCount == TowerNumber && HPCoverForBug)
+        {
+            HP = FirstHP;
+            HPCoverForBug = false;
+        }
+
+
 
         if (GameManager.Instance.EnemyCaptureCount == 0) BossTime = true;
         if (GameManager.Instance.PlayerCaptureCount == 0) BossTime = true;
