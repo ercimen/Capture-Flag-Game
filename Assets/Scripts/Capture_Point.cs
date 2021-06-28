@@ -24,25 +24,34 @@ public class Capture_Point : MonoBehaviour
         oldpos = transform.position;
         FirstHP = HP;
         HPCoverForBug = false;
-        Renderer =transform.GetChild(0).transform.GetChild(2).GetComponent<Renderer>();
+        Renderer = transform.GetChild(0).transform.GetChild(2).GetComponent<Renderer>();
 
-        if (FlagOwner==1) Renderer.material.SetColor("_Color", Color.blue);
+        if (FlagOwner == 1) Renderer.material.SetColor("_Color", Color.blue);
         if (FlagOwner == 2) Renderer.material.SetColor("_Color", Color.red);
 
         InvokeRepeating(nameof(RandomCreate), 3f, 3f);
 
     }
 
-    void RandomCreate() => StartCoroutine(RandomCreateIE());
+    void RandomCreate()
+    {
+        if (GameManager.Instance.isGameStarted == true)
+        {
+            StartCoroutine(RandomCreateIE());
+        }
+
+    }
+
+
     IEnumerator RandomCreateIE()
     {
         if (!BossTime)
-        { 
+        {
             float randomTime = Random.Range(3f, 5f);
-            
+
             yield return new WaitForSeconds(randomTime);
-            if (FlagOwner==1)  Ragdoll_Manager.Instance.CreateTowerWarrior(1, transform.position);
-            if (FlagOwner ==2) Enemy_Manager.Instance.CreateTowerWarrior(1, transform.position);
+            if (FlagOwner == 1) Ragdoll_Manager.Instance.CreateTowerWarrior(1, transform.position);
+            if (FlagOwner == 2) Enemy_Manager.Instance.CreateTowerWarrior(1, transform.position);
 
         }
 
@@ -50,75 +59,85 @@ public class Capture_Point : MonoBehaviour
 
     private void Update()
     {
-        if (GameManager.Instance.PlayerCaptureCount>TowerNumber)
+        if (GameManager.Instance.isGameStarted == true)
         {
-            HP = 11111;
-            HPCoverForBug = true;
-        }
-        if (GameManager.Instance.PlayerCaptureCount == TowerNumber && HPCoverForBug)
-        {
-            HP = FirstHP;
-            HPCoverForBug = false;
-        }
-
-
-
-        if (GameManager.Instance.EnemyCaptureCount == 0) BossTime = true;
-        if (GameManager.Instance.PlayerCaptureCount == 0) BossTime = true;
-
-        if (BossTime)
-        {
-            HP = 1000;
-        }
-
-        if (FlagOwnerChanged)
-        {
-            if (FlagOwner==1)
+            if (GameManager.Instance.PlayerCaptureCount > TowerNumber)
             {
-                StartCoroutine(Confeti(1f));
-             //    Ragdoll_Manager.Instance.CreateGuard(10, transform);
-               // Ragdoll_Manager.Instance.CheckPassiveObjects(10, this.transform);
-
-                Renderer.material.SetColor("_Color", Color.blue);
-             
-                HP = FirstHP;
-               
-                GameManager.Instance.ChangeCountCapture(1,"Player");
-              
-
+                HP = 11111;
+                HPCoverForBug = true;
             }
-            if (FlagOwner == 2)
+            if (GameManager.Instance.PlayerCaptureCount == TowerNumber && HPCoverForBug)
             {
-                Renderer.material.SetColor("_Color", Color.red);
-               
                 HP = FirstHP;
-                
-               
-                GameManager.Instance.ChangeCountCapture(1, "Enemy");
-              
+                HPCoverForBug = false;
             }
-            FlagOwnerChanged = false;
+
+
+
+            if (GameManager.Instance.EnemyCaptureCount == 0) BossTime = true;
+            if (GameManager.Instance.PlayerCaptureCount == 0) BossTime = true;
+
+            if (BossTime)
+            {
+                HP = 1000;
+            }
+
+            if (FlagOwnerChanged)
+            {
+                if (FlagOwner == 1)
+                {
+                    StartCoroutine(Confeti(1f));
+                    //    Ragdoll_Manager.Instance.CreateGuard(10, transform);
+                    // Ragdoll_Manager.Instance.CheckPassiveObjects(10, this.transform);
+
+                    Renderer.material.SetColor("_Color", Color.blue);
+
+                    HP = FirstHP;
+
+                    GameManager.Instance.ChangeCountCapture(1, "Player");
+
+
+                }
+                if (FlagOwner == 2)
+                {
+                    Renderer.material.SetColor("_Color", Color.red);
+
+                    HP = FirstHP;
+
+
+                    GameManager.Instance.ChangeCountCapture(1, "Enemy");
+
+                }
+                FlagOwnerChanged = false;
+            }
+
+
         }
+
+
+
+
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") )
+        if (other.CompareTag("Player"))
         {
-            if (FlagOwner!=1)
+            if (FlagOwner != 1)
             {
-             HP--;
+                HP--;
                 StartCoroutine(Dust(1f));
                 if (HP <= 0)
-                 {
-                FlagOwner = 1;
-                FlagOwnerChanged = true;
+                {
+                    FlagOwner = 1;
+                    FlagOwnerChanged = true;
                 }
-                
+
             }
             if (FlagOwner == 1)
             {
-             //   HP++;
+                //   HP++;
                 if (HP >= FirstHP)
                 {
                     HP = FirstHP;
@@ -126,7 +145,7 @@ public class Capture_Point : MonoBehaviour
             }
 
             // txt.GetComponent<UnityEngine.UI.Text>().text = HP.ToString();
-           
+
         }
 
         if (other.CompareTag("Enemy"))
@@ -143,7 +162,7 @@ public class Capture_Point : MonoBehaviour
             }
             if (FlagOwner == 2)
             {
-              //  HP++;
+                //  HP++;
                 if (HP >= FirstHP)
                 {
                     HP = FirstHP;
@@ -151,7 +170,7 @@ public class Capture_Point : MonoBehaviour
             }
 
             // txt.GetComponent<UnityEngine.UI.Text>().text = HP.ToString();
-          
+
         }
 
     }

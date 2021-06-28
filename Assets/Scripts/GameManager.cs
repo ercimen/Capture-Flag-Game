@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject inGamePanel;
     public GameObject GameOverPanel;
     public GameObject NextLevelPanel;
+    public GameObject TapToPlay;
     [SerializeField] GameObject EnemyCastle,PlayerCastle;
     [Header("Other")]
     public Text Lives, Diamond, ButtonText;
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] Sprite[] Sprites;
 
     public int liveCount;
+    public bool isGameStarted;
     public int Score = 0;
     private bool click;
 
@@ -43,7 +45,11 @@ public class GameManager : MonoBehaviour
     #endregion
     private void Awake()
     {
-
+        if (SceneManager.GetActiveScene().buildIndex==0)
+        {
+        isGameStarted = false;
+        }
+       
 }
     private void Start()
     {
@@ -70,24 +76,25 @@ public class GameManager : MonoBehaviour
 
         inGamePanel.SetActive(false);
         GameOverPanel.SetActive(true);
-        StartCoroutine(ResourceTickOver(5f, 0));
     }
     public void NextLevel()
     {
         EnemyCastle.GetComponent<Animator>().enabled =true;
-        ButtonText.text = "GET " + liveCount;
+      //  ButtonText.text = "GET " + liveCount;
         inGamePanel.SetActive(false);
         NextLevelPanel.SetActive(true);
     }
     public void NextLevelButton()
     {
         Score += liveCount;
+        isGameStarted = true;
         if (click == false)
         {
             PlayerPrefs.SetInt("score", Score);
             Diamond.text = Score.ToString();
             StartCoroutine(ResourceTickOver(.5f, 1));
             click = true;
+            
         }
     }
     IEnumerator ResourceTickOver(float waitTime, int level)
@@ -133,5 +140,16 @@ public class GameManager : MonoBehaviour
     public int CaptureCount()
     {
         return PlayerCaptureCount;
+    }
+
+    public void TapTap()
+    {
+        isGameStarted = true;
+        TapToPlay.gameObject.SetActive(false);
+    }
+
+    public void TryAgain()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

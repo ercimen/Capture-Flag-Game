@@ -20,6 +20,8 @@ public class LevelManager : MonoBehaviour
     }
     private void Update()
     {
+
+
         if (GameManager.Instance.EnemyCaptureCount==0)
         {
             Camera_Control.Instance.EndGameFc();

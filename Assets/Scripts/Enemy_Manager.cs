@@ -39,29 +39,45 @@ public class Enemy_Manager : MonoBehaviour
     }
     private void Update()
     {
-        //   CheckActive();
-        if (GameManager.Instance.EnemyCaptureCount == 0) BossTime = true;
+        if (GameManager.Instance.isGameStarted == true)
+        {
+            //   CheckActive();
+            if (GameManager.Instance.EnemyCaptureCount == 0) BossTime = true;
+        }
 
-       
+
+
+
 
     }
 
-    void RandomCreate() => StartCoroutine(RandomCreateIE());
+    void RandomCreate()
+    {
+        if (GameManager.Instance.isGameStarted == true)
+        {
+  StartCoroutine(RandomCreateIE());
+        }
+      
+    
+    }
+        
     IEnumerator RandomCreateIE()
     {
-        if (!BossTime)
+        if (GameManager.Instance.isGameStarted == true)
         {
-         float maxX, minX;
+            if (!BossTime)
+            {
+                float maxX, minX;
 
-        maxX = 13;
-        minX = -12;
-        float randomPos = Random.Range(minX, maxX);
-        float randomTime = Random.Range(0.5f, 1.5f);
-        EnemyPos = new Vector3(randomPos, 1.6f, 80f);
-        yield return new WaitForSeconds(randomTime);
-        CheckPassiveObjects(1, EnemyPos);
+                maxX = 13;
+                minX = -12;
+                float randomPos = Random.Range(minX, maxX);
+                float randomTime = Random.Range(0.5f, 1.5f);
+                EnemyPos = new Vector3(randomPos, 1.6f, 80f);
+                yield return new WaitForSeconds(randomTime);
+                CheckPassiveObjects(1, EnemyPos);
+            }
         }
-       
     }
     public void CheckPassiveObjects(byte count, Vector3 position)
     {
@@ -113,7 +129,7 @@ public class Enemy_Manager : MonoBehaviour
 
             }
         }
-     }
+    }
 
     public void CreateTowerWarrior(byte count, Vector3 position)
     {
@@ -139,23 +155,23 @@ public class Enemy_Manager : MonoBehaviour
             }
         }
     }
-        public void CheckActive()
+    public void CheckActive()
+    {
+        RagdollActive.Clear();
+
+        for (int i = 0; i < Ragdoll.Length; i++)
         {
-            RagdollActive.Clear();
-
-            for (int i = 0; i < Ragdoll.Length; i++)
+            if (Ragdoll[i].activeInHierarchy)
             {
-                if (Ragdoll[i].activeInHierarchy)
-                {
-                    RagdollActive.Add(i);
-                }
+                RagdollActive.Add(i);
             }
-
         }
 
-
-
-
-
-
     }
+
+
+
+
+
+
+}

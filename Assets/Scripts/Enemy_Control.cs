@@ -17,28 +17,33 @@ public class Enemy_Control : MonoBehaviour
     {
 
         Animator = GetComponent<Animator>();
-        HP = 1; 
+        HP = 1;
 
     }
 
 
     void Update()
     {
-        if (GameManager.Instance.PlayerCaptureCount == 0) 
+        if (GameManager.Instance.isGameStarted == true)
         {
-            Capturetower = false;
-            target = null;
-            fight = false;
-            transform.LookAt(EndLevelTarget.transform.position);
+            if (GameManager.Instance.PlayerCaptureCount == 0)
+            {
+                Capturetower = false;
+                target = null;
+                fight = false;
+                transform.LookAt(EndLevelTarget.transform.position);
+            }
+            EnemyMove();
+
+            if (HP > 1)
+            {
+                transform.localScale = new Vector3(HP, HP, HP);
+
+            }
         }
-        EnemyMove();
-        
-        if (HP>1)
-        {
-            transform.localScale = new Vector3(HP, HP,HP);
-          
-        }
- 
+
+
+
 
     }
     void EnemyMove()
@@ -48,10 +53,10 @@ public class Enemy_Control : MonoBehaviour
         {
             transform.LookAt(transform.position + Vector3.back);
             transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
-            
+
             if (Capturetower)
             {
-                fight = false;  
+                fight = false;
                 Animator.SetFloat("Speed", 1);
                 transform.LookAt(target.transform);
                 transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
@@ -60,12 +65,12 @@ public class Enemy_Control : MonoBehaviour
 
         if (fight)
         {
-            
+
             if (target.activeInHierarchy)
             {
                 transform.LookAt(target.transform);
                 transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
-                
+
             }
 
             if (!target.activeInHierarchy)
@@ -76,7 +81,7 @@ public class Enemy_Control : MonoBehaviour
 
         }
 
-       
+
 
     }
 
@@ -89,7 +94,7 @@ public class Enemy_Control : MonoBehaviour
         }
         if (other.CompareTag("Tower") && Capturetower)
         {
-           
+
             Capturetower = false;
             this.gameObject.SetActive(false);
             Debug.Log("Towere girdim");
@@ -111,7 +116,7 @@ public class Enemy_Control : MonoBehaviour
             if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner == 1)
             {
                 Capturetower = true;
-                Debug.Log("Tower Range "+Capturetower);
+                Debug.Log("Tower Range " + Capturetower);
                 target = other.gameObject.transform.GetChild(2).gameObject;
             }
             if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner != 1)
@@ -137,8 +142,8 @@ public class Enemy_Control : MonoBehaviour
         {
 
             Capturetower = false;
-            fight = false; 
-           
+            fight = false;
+
             if (gameObject.activeInHierarchy)
             {
                 StartCoroutine(Death(0.3f));
