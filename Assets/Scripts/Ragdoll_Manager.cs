@@ -7,8 +7,8 @@ public class Ragdoll_Manager : MonoBehaviour
     [SerializeField] GameObject[] Ragdoll;
     [SerializeField] private List<int> RagdollActive;
     [SerializeField] private GameObject PlayerMidPos;
-    [SerializeField] private float MidposSpeed; // == PlayerSpeed;
-    public byte Ragdoll_StartCount;
+    [SerializeField] public float Player_Speed,Player_SpawnTime; 
+
     private byte createcount;
     private byte mod;
     Transform oldpos;
@@ -31,7 +31,11 @@ public class Ragdoll_Manager : MonoBehaviour
     private void Awake()
     {
         RagdollActive = new List<int>();
-        GameManager.Instance.ChangeCountText(Ragdoll_StartCount);
+       
+
+        if (Player_Speed==0)  Player_Speed = 5;
+        if (Player_SpawnTime == 0) Player_SpawnTime = 0.3f;
+
     }
 
     private void Start()

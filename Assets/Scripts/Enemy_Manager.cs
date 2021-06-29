@@ -7,8 +7,10 @@ public class Enemy_Manager : MonoBehaviour
     [SerializeField] GameObject[] Ragdoll;
     [SerializeField] private List<int> RagdollActive;
     [SerializeField] private GameObject PlayerMidPos;
-    [SerializeField] private float MidposSpeed; // == PlayerSpeed;
-    public byte Ragdoll_StartCount;
+    [Header("EnemySpawn")]
+    [SerializeField] public float SpawnTime,EnemySpeed;
+
+    
     private byte createcount;
     Vector3 EnemyPos;
     public bool BossTime;
@@ -29,12 +31,16 @@ public class Enemy_Manager : MonoBehaviour
     private void Awake()
     {
         RagdollActive = new List<int>();
+        if (SpawnTime==0) SpawnTime = 0.5f;
+        if (EnemySpeed == 0) EnemySpeed = 3f;
+
+
         //   GameManager.Instance.ChangeCountText(Ragdoll_StartCount);
     }
 
     private void Start()
     {
-        InvokeRepeating(nameof(RandomCreate), .5f, .5f);
+        InvokeRepeating(nameof(RandomCreate), SpawnTime, SpawnTime);
         CheckActive();
     }
     private void Update()
@@ -72,7 +78,7 @@ public class Enemy_Manager : MonoBehaviour
                 maxX = 13;
                 minX = -12;
                 float randomPos = Random.Range(minX, maxX);
-                float randomTime = Random.Range(0.5f, 1.5f);
+                float randomTime = Random.Range(SpawnTime,SpawnTime+1.5f);
                 EnemyPos = new Vector3(randomPos, 1.6f, 80f);
                 yield return new WaitForSeconds(randomTime);
                 CheckPassiveObjects(1, EnemyPos);

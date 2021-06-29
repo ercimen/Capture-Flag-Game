@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player_Control : MonoBehaviour
 {
 
-    [SerializeField] float PlayerSpeed;
+    float PlayerSpeed;
     public float HP;
     private Animator Animator;
     public bool fight;
@@ -27,11 +27,13 @@ public class Player_Control : MonoBehaviour
         Renderer = transform.GetChild(1).transform.GetChild(0).GetComponent<Renderer>();
         Renderer2 = transform.GetChild(1).transform.GetChild(1).GetComponent<Renderer>();
         HP = 1;
+        
+
     }
 
     private void Start()
     {
-
+        PlayerSpeed = Ragdoll_Manager.Instance.Player_Speed;
 
     }
 
@@ -81,11 +83,6 @@ public class Player_Control : MonoBehaviour
 
             if (Capturetower)
             {
-                if (target.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner==1)
-                {
-
-                }
-
                 Animator.SetFloat("Speed", 1);
                 transform.position += transform.forward * PlayerSpeed * Time.deltaTime; // Moving
                 transform.LookAt(target.transform);

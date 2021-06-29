@@ -5,7 +5,7 @@ using UnityEngine;
 public class Enemy_Control : MonoBehaviour
 {
 
-    [SerializeField] float PlayerSpeed;
+    float PlayerSpeed;
     [SerializeField] GameObject EndLevelTarget;
     public float HP;
     private Animator Animator;
@@ -15,10 +15,14 @@ public class Enemy_Control : MonoBehaviour
     bool BossTime;
     void Awake()
     {
-
         Animator = GetComponent<Animator>();
         HP = 1;
+       
+    }
 
+    private void Start()
+    {
+        PlayerSpeed = Enemy_Manager.Instance.EnemySpeed;
     }
 
 

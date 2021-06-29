@@ -8,11 +8,12 @@ public class Cannon_Manager : MonoBehaviour
     GameObject target;
     Vector3 targetPos;
     int ActiveBall;
-    bool fight;
+    public bool fight;
     public bool fired;
     float timer;
     float attackDelay;
     public int CannonOwner;
+    Animator anim;
 
     [SerializeField] GameObject FireEffect;
 
@@ -21,7 +22,7 @@ public class Cannon_Manager : MonoBehaviour
     {
         ActiveBall = 0;
         attackDelay = 1.5f;
-        CannonOwner = transform.parent.gameObject.GetComponent<Capture_Point>().FlagOwner;
+        anim = GetComponent<Animator>();
 
     }
     void Start()
@@ -108,57 +109,32 @@ public class Cannon_Manager : MonoBehaviour
 
     void Fire()
     {
-       
-        Balls[ActiveBall].transform.position = Vector3.Lerp(Balls[ActiveBall].transform.position, targetPos, 20f * Time.deltaTime);
+        anim.SetTrigger("Shoot");
+        // targetPos += new Vector3(0, 0, 100f);
+        // Balls[ActiveBall].transform.position = Vector3.Lerp(Balls[ActiveBall].transform.position, targetPos, 1f * Time.deltaTime);
         // Balls[ActiveBall].GetComponent<Rigidbody>().velocity = targetPos*20;
-        
+        Balls[ActiveBall].transform.LookAt(targetPos);
+        Balls[ActiveBall].transform.Rotate(new Vector3(-90, 0, 0));
+        Balls[ActiveBall].transform.position += transform.forward * Time.deltaTime * 10;
     }
 
 
     private void OnTriggerStay(Collider other)
     {
-        /*
-        if (other.CompareTag("Player") && CannonOwner == 1)
-        {
-            fight = false;
-            target = null;
-            Debug.Log("Dostum geldi");
-        }
-        if (other.CompareTag("Enemy") && CannonOwner == 2)
-        {
 
-            fight = false;
-            target = null;
-            Debug.Log("Dostum geldi");
-        }
-        */
-
-        if (other.CompareTag("Player") && CannonOwner !=1)
+        if (other.CompareTag("EnemyTrig") )
         {
 
                 fight = true;
                 Debug.Log("Tower Range ");
           
-            target = other.gameObject;
-            if (!target)
+           
+            if (target==null)
                 {
                     target = other.gameObject;
                 }
         }
-       
-        if (other.CompareTag("Enemy") && CannonOwner != 2)
-        {
-
-                fight = true;
-                Debug.Log("Tower Range ");
-            target = other.gameObject;
-            if (!target)
-                {
-                    target = other.gameObject;
-                }
-
-        }
-        
+ 
        
     }
 
