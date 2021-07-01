@@ -27,27 +27,29 @@ public class Player_Control : MonoBehaviour
         Renderer = transform.GetChild(1).transform.GetChild(0).GetComponent<Renderer>();
         Renderer2 = transform.GetChild(1).transform.GetChild(1).GetComponent<Renderer>();
         HP = 1;
-        
+
 
     }
 
     private void Start()
     {
         PlayerSpeed = Ragdoll_Manager.Instance.Player_Speed;
-
+        RbforChilds(true);
+        ColforChilds(false);
+        transform.GetChild(3).gameObject.GetComponent<Collider>().enabled = true;
     }
 
     void Update()
     {
         CheckBoss();
-        if (HP>1)
+        if (HP > 1)
         {
             transform.localScale = new Vector3(HP, HP, HP);
         }
-   
+
     }
 
-   
+
 
 
     void CheckBoss()
@@ -69,7 +71,7 @@ public class Player_Control : MonoBehaviour
 
     }
 
-    
+
     void PlayerMove()
     {
 
@@ -88,7 +90,7 @@ public class Player_Control : MonoBehaviour
                 transform.LookAt(target.transform);
             }
         }
-       
+
 
         if (fight)
         {
@@ -107,7 +109,7 @@ public class Player_Control : MonoBehaviour
 
         }
 
-       
+
 
     }
 
@@ -130,15 +132,6 @@ public class Player_Control : MonoBehaviour
             Debug.Log("Towere girdim");
 
         }
-
-        if (other.CompareTag("TowerRange"))
-        {
-          
-
-        }
-
-       
-
     }
 
     private void OnTriggerStay(Collider other)
@@ -160,7 +153,7 @@ public class Player_Control : MonoBehaviour
             if (other.gameObject.transform.parent.GetComponent<Capture_Point>().FlagOwner == 2)
             {
                 Capturetower = true;
-                
+
                 target = other.gameObject.transform.GetChild(2).gameObject;
             }
 
@@ -171,9 +164,15 @@ public class Player_Control : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+
         if (collision.collider.tag == "Jump")
         {
             gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(0, 4f, 2f) * 2, ForceMode.Impulse); // Jump  
+        }
+        if (collision.collider.CompareTag("Block"))
+        {
+
+            RagdollDeath();
         }
 
         if (collision.collider.tag == "KillPlayer")
@@ -183,8 +182,7 @@ public class Player_Control : MonoBehaviour
             Capturetower = false;
             if (gameObject.activeInHierarchy)
             {
-                StartCoroutine(Death(0.3f));
-
+                RagdollDeath();
             }
 
             HP = 1;
@@ -195,39 +193,95 @@ public class Player_Control : MonoBehaviour
         if (collision.collider.CompareTag("Enemy"))
         {
             HP--;
-            if (HP<=0)
+            if (HP <= 0)
             {
-                 guard = false;
-                 Capturetower = false;
+
+                guard = false;
+                Capturetower = false;
                 if (gameObject.activeInHierarchy)
-                {  
+                {
                     StartCoroutine(Death(0.3f));
 
                 }
-              
-                 HP = 1;
-            }
 
+                HP = 1;
+            }
 
             GameManager.Instance.ChangeCountText(-1);
         }
 
-        if (collision.collider.CompareTag("Ball2"))
-        {
-             this.gameObject.GetComponent<Rigidbody>().AddExplosionForce(300f, transform.position, 5f, 3.0F);
-           // StartCoroutine(PassiveDelay(1f));
-        }
     }
+
+    void RagdollDeath()
+    {
+        Animator.enabled = false;
+        RbforChilds(false);
+        ColforChilds(true);
+        StartCoroutine(DeathRagAnim(1f));
+    }
+
+    void RbforChilds(bool state)
+    {
+
+        Rigidbody[] rbc = GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody childrb in rbc)
+        {
+            childrb.isKinematic = state;
+        }
+        gameObject.GetComponent<Rigidbody>().isKinematic = false;
+    }
+    void ColforChilds(bool state)
+    {
+        Collider[] Colc = GetComponentsInChildren<Collider>();
+        foreach (Collider ChildCol in Colc)
+        {
+            ChildCol.enabled = state;
+        }
+        gameObject.GetComponent<Collider>().enabled = true;
+    }
+
     IEnumerator Death(float waitTime)
     {
-        transform.GetChild(1).gameObject.SetActive(false); 
+        transform.GetChild(1).gameObject.SetActive(false);
         transform.GetChild(2).gameObject.SetActive(true);
         transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().Play();
         yield return new WaitForSeconds(waitTime);
         transform.GetChild(1).gameObject.SetActive(true);
         transform.GetChild(2).gameObject.SetActive(false);
         this.gameObject.SetActive(false);
+        RbforChilds(true);
+        ColforChilds(false);
+        transform.GetChild(3).gameObject.GetComponent<Collider>().enabled = true;
+        RefreshStats();
     }
+
+    void RefreshStats()
+    {
+        Animator.enabled = true;
+        guard = false;
+        Capturetower = false;
+        HP = 1;
+        target = null;
+        fight = false;
+    }
+    IEnumerator DeathRagAnim(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+        transform.GetChild(1).gameObject.SetActive(false);
+        transform.GetChild(2).gameObject.SetActive(true);
+        transform.GetChild(2).gameObject.GetComponent<ParticleSystem>().Play();
+        yield return new WaitForSeconds(waitTime / 3);
+        transform.GetChild(1).gameObject.SetActive(true);
+        transform.GetChild(2).gameObject.SetActive(false);
+        this.gameObject.SetActive(false);
+        RbforChilds(true);
+        ColforChilds(false);
+        transform.GetChild(3).gameObject.GetComponent<Collider>().enabled = true;
+        RefreshStats();
+    }
+
+
+
 
     IEnumerator PassiveDelay(float waitTime)
     {

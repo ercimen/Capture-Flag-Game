@@ -21,6 +21,7 @@ TagManager:
   - Ball2
   - PlayerTrig
   - EnemyTrig
+  - EnemyArcherTrig
   layers:
   - Default
   - TransparentFX
