@@ -61,6 +61,7 @@ public class Capture_Point : MonoBehaviour
     {
         if (GameManager.Instance.isGameStarted == true)
         {
+          /*
             if (GameManager.Instance.PlayerCaptureCount > TowerNumber)
             {
                 HP = 11111;
@@ -71,7 +72,7 @@ public class Capture_Point : MonoBehaviour
                 HP = FirstHP;
                 HPCoverForBug = false;
             }
-
+           */
 
 
             if (GameManager.Instance.EnemyCaptureCount == 0) BossTime = true;

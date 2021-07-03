@@ -49,8 +49,10 @@ public class GameManager : MonoBehaviour
         {
         isGameStarted = false;
         }
+        inGamePanel.gameObject.SetActive(false);
        
-}
+
+    }
     private void Start()
     {
         click = false;
@@ -94,7 +96,8 @@ public class GameManager : MonoBehaviour
             Diamond.text = Score.ToString();
             StartCoroutine(ResourceTickOver(.5f, 1));
             click = true;
-            
+            inGamePanel.gameObject.SetActive(true);
+
         }
     }
     IEnumerator ResourceTickOver(float waitTime, int level)
@@ -131,7 +134,6 @@ public class GameManager : MonoBehaviour
             PlayerCaptureCount -= count;
            
         }
-        TowerImage1.sprite = Sprites[PlayerCaptureCount];
         Debug.Log("PlayerCapture:"+PlayerCaptureCount);
         Debug.Log("EnemyCapture:" + EnemyCaptureCount);
 
@@ -146,6 +148,7 @@ public class GameManager : MonoBehaviour
     {
         isGameStarted = true;
         TapToPlay.gameObject.SetActive(false);
+        inGamePanel.gameObject.SetActive(true);
     }
 
     public void TryAgain()

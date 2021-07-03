@@ -60,7 +60,9 @@ public class Camera_Control : MonoBehaviour
     public void LoseGame()
     {
         transform.LookAt(new Vector3(0, 0, 0));
-        transform.position = Vector3.Lerp(transform.position, EndGame2.transform.position, 0.1f);
+       // transform.position = Vector3.Lerp(transform.position, EndGame2.transform.position, 0.3f);
+        transform.position = Vector3.MoveTowards(transform.position, EndGame2.transform.position, 1f);
+       
         transform.rotation = Quaternion.Lerp(transform.rotation, EndGame2.rotation, Time.time * 0.1f);
 
     }
