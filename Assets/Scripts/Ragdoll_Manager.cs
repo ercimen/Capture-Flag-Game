@@ -52,7 +52,7 @@ public class Ragdoll_Manager : MonoBehaviour
     }
    
    
-    public void CheckPassiveObjects(byte count, Transform position)
+    public void CheckPassiveObjects(byte Hp, byte count, Transform position)
     {
         createcount = 0;
         GameManager.Instance.ChangeCountText(count);
@@ -66,7 +66,7 @@ public class Ragdoll_Manager : MonoBehaviour
                 Ragdoll[i].GetComponent<Player_Control>().fight = false;
                 Ragdoll[i].transform.position = position.position;
                 Ragdoll[i].GetComponent<Rigidbody>().AddForce(new Vector3(0, 1f, 0f) * 2, ForceMode.Impulse);
-                Ragdoll[i].gameObject.GetComponent<Player_Control>().HP = 1;
+                Ragdoll[i].gameObject.GetComponent<Player_Control>().HP = Hp;
                 if (createcount == count)
                 { 
                      CheckActive(); 
